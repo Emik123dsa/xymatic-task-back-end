@@ -11,3 +11,5 @@ build:
 up:
 	docker-compose -f docker-compose.yml up -d --force-recreate
 
+ssh-nginx:
+	docker-compose -f docker-compose.yml exec nginx /bin/bash

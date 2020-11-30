@@ -30,9 +30,9 @@ services:
     restart: always
     tty: true
     environment:
-      POSTGRES_USER: "emik"
-      POSTGRES_PASSWORD: "emik"
-      POSTGRES_DB: "portfolio"
+      POSTGRES_USER: "xymatic-user"
+      POSTGRES_PASSWORD: "root"
+      POSTGRES_DB: "xymatic-localhost"
     ports:
       - "5432:5432"
     volumes:

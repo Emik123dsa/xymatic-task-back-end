@@ -1,0 +1,58 @@
+version: "3.7"
+
+services:
+  tomcat:
+    container_name: "xymatic-tomcat"
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - xymatic-network
+  nginx:
+    container_name: portfolio-nginx
+    restart: unless-stopped
+    tty: true
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "./conf.d:/etc/nginx/conf.d/"
+    depends_on:
+      - tomcat
+    networks:
+      - xymatic-network
+  db:
+    container_name: "xymatic-db"
+    image: postgres:latest
+    restart: always
+    tty: true
+    environment:
+      POSTGRES_USER: "emik"
+      POSTGRES_PASSWORD: "emik"
+      POSTGRES_DB: "portfolio"
+    ports:
+      - "5432:5432"
+    volumes:
+      - "./database/seeds:/database"
+    expose:
+      - "5432"
+    networks:
+      - xymatic-network
+  adminer:
+    container_name: "xymatic-adminer"
+    image: adminer
+    ports:
+      - "3000:8080"
+    expose:
+      - "3000"
+    depends_on:
+      - db
+    networks:
+      - xymatic-network
+
+networks:
+  xymatic-network:
+    driver: bridge

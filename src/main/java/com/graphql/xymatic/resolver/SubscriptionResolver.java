@@ -1,20 +1,31 @@
 package com.graphql.xymatic.resolver;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Random;
 import org.reactivestreams.*;
-import com.coxautodev.graphql.tools.GraphQLSubscriptionResolver;
-import com.graphql.xymatic.model.StockPrice;
 
-import reactor.core.publisher.Flux;
+import com.coxautodev.graphql.tools.GraphQLSubscriptionResolver;
+import com.graphql.xymatic.model.UserModel;
+import com.graphql.xymatic.repository.UserRepository;
+
+import reactor.core.publisher.*;
 
 public class SubscriptionResolver implements GraphQLSubscriptionResolver {
+  
+  private final UserRepository userRepository;
 
-  public Publisher<StockPrice> stockPrice(String symbol) {
+  public SubscriptionResolver(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
+
+  public Publisher<List<UserModel>> usersSubscribe() {
+    return Flux.interval(Duration.ofSeconds(1)).map(num -> userRepository.findAll());
+  }
+
+  public Publisher<Integer> vendorSubscribe() {
     Random random = new Random();
-    return Flux.interval(Duration.ofSeconds(1))
-            .map(num -> new StockPrice(symbol, random.nextDouble(), LocalDateTime.now()));
+    return Mono.just(random.nextInt());
   }
 
 } 

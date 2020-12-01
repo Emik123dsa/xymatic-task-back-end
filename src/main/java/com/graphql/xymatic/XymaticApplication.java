@@ -20,7 +20,6 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class XymaticApplication {
-
   public static void main(String[] args) {
     SpringApplication.run(XymaticApplication.class, args);
   }
@@ -63,8 +62,8 @@ public class XymaticApplication {
    * @return
    */
   @Bean 
-  public SubscriptionResolver subscription() {
-	return new SubscriptionResolver();
+  public SubscriptionResolver subscription(UserRepository userRepository) {
+	  return new SubscriptionResolver(userRepository);
   }
   /**
    *  Query Resolving

@@ -22,12 +22,6 @@ public class MutationResolver implements GraphQLMutationResolver {
 
   public UserModel newUser(String name, String password, String email) {
 
-    UserModel userFetched = userRepository.findOneByEmail(email); 
-
-    if (userFetched != null) {
-      
-    }
-
     UserModel userModel = new UserModel();
     
     userModel.setName(name);

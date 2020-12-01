@@ -5,6 +5,11 @@ type User {
   email: String!
 }
 
+type Subscription {
+  usersSubscribe: [User]!
+  vendorSubscribe: Long
+}
+
 type Query {
   findAllUsers: [User]!
   countUsers: Long!

@@ -2,7 +2,6 @@ package com.graphql.xymatic.resolver;
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.graphql.xymatic.exception.UserNotFoundException;
 import com.graphql.xymatic.model.PostModel;
-import com.graphql.xymatic.model.StockDetail;
 import com.graphql.xymatic.model.UserModel;
 import com.graphql.xymatic.repository.PostRepository;
 import com.graphql.xymatic.repository.UserRepository;
@@ -45,8 +44,4 @@ public class QueryResolver implements GraphQLQueryResolver {
     return postRepository.count();
   }
 
-  public StockDetail stockDetail(String symbol) {
-
-    return new StockDetail(symbol, "name", 2000l);
- }
 }

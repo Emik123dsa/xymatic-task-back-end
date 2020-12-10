@@ -1,6 +1,7 @@
 package com.graphql.xymatic;
 
 import com.graphql.xymatic.adapters.GraphQLErrorAdapter;
+import com.graphql.xymatic.repository.ChartRepository;
 import com.graphql.xymatic.repository.PostRepository;
 import com.graphql.xymatic.repository.UserRepository;
 import com.graphql.xymatic.resolver.MutationResolver;
@@ -10,19 +11,31 @@ import com.graphql.xymatic.resolver.SubscriptionResolver;
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQLError;
 import graphql.servlet.GraphQLErrorHandler;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class XymaticApplication {
+public class XymaticApplication implements CommandLineRunner {
 
+  private static final Logger logger = LoggerFactory.getLogger(
+    XymaticApplication.class
+  );
   public static void main(String[] args) {
     SpringApplication.run(XymaticApplication.class, args);
   }
+
+  @Override
+  public void run(String... args) {}
 
   @Bean
   public GraphQLErrorHandler errorHandler() {
@@ -76,9 +89,10 @@ public class XymaticApplication {
   @Bean
   public QueryResolver query(
     UserRepository userRepository,
-    PostRepository postRepository
+    PostRepository postRepository,
+    ChartRepository chartRepository
   ) {
-    return new QueryResolver(userRepository, postRepository);
+    return new QueryResolver(userRepository, postRepository, chartRepository);
   }
 
   /**

@@ -10,6 +10,7 @@ type User {
 type Query {
   findAllUsers: [User]!
   countUsers: Long!
+  findUserByChart(period: Period): [Chart]!
 }
 
 type Subscription {

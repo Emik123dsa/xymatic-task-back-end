@@ -1,12 +1,12 @@
 package com.graphql.xymatic.enums;
 
 public enum PeriodEnums {
-  TODAY("current_timestamp"),
-  YESTERDAY("1 DAY AGO"),
-  DAY("days"),
-  MONTH("month"),
-  YEAR("year"),
-  ALL("ALL TIME");
+  TODAY("1 hour"),
+  YESTERDAY("1 hour - 1 day"),
+  DAY("1 day"),
+  MONTH("1 month"),
+  YEAR("1 year"),
+  ALL("1 month");
 
   private String period;
 

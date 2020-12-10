@@ -31,4 +31,28 @@ public class SubscriptionResolver implements GraphQLSubscriptionResolver {
         num -> new SubscribeModel(userRepository.count(), LocalDateTime.now())
       );
   }
+
+  public Publisher<SubscribeModel> postSubscribe() {
+    return Flux
+      .interval(Duration.ofSeconds(1))
+      .map(
+        num -> new SubscribeModel(userRepository.count(), LocalDateTime.now())
+      );
+  }
+
+  public Publisher<SubscribeModel> impressionsSubscribe() {
+    return Flux
+      .interval(Duration.ofSeconds(1))
+      .map(
+        num -> new SubscribeModel(userRepository.count(), LocalDateTime.now())
+      );
+  }
+
+  public Publisher<SubscribeModel> playsSubscribe() {
+    return Flux
+      .interval(Duration.ofSeconds(1))
+      .map(
+        num -> new SubscribeModel(userRepository.count(), LocalDateTime.now())
+      );
+  }
 }

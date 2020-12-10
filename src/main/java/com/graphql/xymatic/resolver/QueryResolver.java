@@ -1,12 +1,15 @@
 package com.graphql.xymatic.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
+import com.graphql.xymatic.enums.PeriodEnums;
 import com.graphql.xymatic.exception.UserNotFoundException;
+import com.graphql.xymatic.model.ChartModel;
 import com.graphql.xymatic.model.PostModel;
 import com.graphql.xymatic.model.UserModel;
+import com.graphql.xymatic.repository.ChartRepository;
 import com.graphql.xymatic.repository.PostRepository;
 import com.graphql.xymatic.repository.UserRepository;
-import javax.persistence.criteria.CriteriaBuilder;
+import java.util.List;
 
 public class QueryResolver implements GraphQLQueryResolver {
 
@@ -14,12 +17,16 @@ public class QueryResolver implements GraphQLQueryResolver {
 
   private final UserRepository userRepository;
 
+  private final ChartRepository chartRepository;
+
   public QueryResolver(
     UserRepository userRepository,
-    PostRepository postRepository
+    PostRepository postRepository,
+    ChartRepository chartRepository
   ) {
     this.postRepository = postRepository;
     this.userRepository = userRepository;
+    this.chartRepository = chartRepository;
   }
 
   public Iterable<PostModel> findAllPosts() {
@@ -39,7 +46,13 @@ public class QueryResolver implements GraphQLQueryResolver {
     return user;
   }
 
-  // public
+  public Iterable<ChartModel> findUserByChart(PeriodEnums pEnums) {
+    return chartRepository.findUserChart(pEnums);
+  }
+
+  public Iterable<ChartModel> findPostByChart(PeriodEnums pEnums) {
+    return chartRepository.findUserChart(pEnums);
+  }
 
   public long countUsers() {
     return userRepository.count();

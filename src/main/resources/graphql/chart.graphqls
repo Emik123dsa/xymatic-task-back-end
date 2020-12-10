@@ -1,0 +1,5 @@
+type Chart {
+  timestamp: String!
+  delta: Long!
+  deltaTotal: Long!
+}

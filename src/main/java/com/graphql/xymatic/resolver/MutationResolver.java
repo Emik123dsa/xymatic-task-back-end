@@ -11,7 +11,7 @@ public class MutationResolver implements GraphQLMutationResolver {
   private final UserRepository userRepository;
 
   private final PostRepository postRepository;
-  
+
   public MutationResolver(
     UserRepository userRepository,
     PostRepository postRepository
@@ -21,9 +21,8 @@ public class MutationResolver implements GraphQLMutationResolver {
   }
 
   public UserModel newUser(String name, String password, String email) {
-
     UserModel userModel = new UserModel();
-    
+
     userModel.setName(name);
     userModel.setEmail(email);
     userModel.setPassword(password);

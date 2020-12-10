@@ -1,6 +1,7 @@
 package com.graphql.xymatic.model;
 
 import java.io.Serializable;
+import java.sql.Date;
 import javax.persistence.*;
 
 @Entity
@@ -13,11 +14,20 @@ public class UserModel implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column(name = "name")
   private String name;
 
+  @Column(name = "email")
   private String email;
 
+  @Column(name = "password")
   private String password;
+
+  @Column(name = "created_at")
+  private Date createdAt;
+
+  @Column(name = "updated_at")
+  private Date updatedAt;
 
   public UserModel() {}
 
@@ -61,6 +71,22 @@ public class UserModel implements Serializable {
 
   public String getPassword() {
     return password;
+  }
+
+  public void setCreatedAt(Date createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public void setUpdatedAt(Date updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
+  public Date getCreatedAt() {
+    return createdAt;
+  }
+
+  public Date setUpdatedAt() {
+    return updatedAt;
   }
 
   @Override

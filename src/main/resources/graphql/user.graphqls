@@ -3,16 +3,17 @@ type User {
   name: String!
   password: String!
   email: String!
-}
-
-type Subscription {
-  usersSubscribe: [User]!
-  vendorSubscribe: Long
+  createdAt: String!
+  updatedAt: String!
 }
 
 type Query {
   findAllUsers: [User]!
   countUsers: Long!
+}
+
+type Subscription {
+  userSubscribe: Subscribe!
 }
 
 type Mutation {

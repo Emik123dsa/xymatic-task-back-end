@@ -1,10 +1,12 @@
 package com.graphql.xymatic.resolver;
+
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.graphql.xymatic.exception.UserNotFoundException;
 import com.graphql.xymatic.model.PostModel;
 import com.graphql.xymatic.model.UserModel;
 import com.graphql.xymatic.repository.PostRepository;
 import com.graphql.xymatic.repository.UserRepository;
+import javax.persistence.criteria.CriteriaBuilder;
 
 public class QueryResolver implements GraphQLQueryResolver {
 
@@ -31,10 +33,13 @@ public class QueryResolver implements GraphQLQueryResolver {
   public UserModel findUserByEmail(String email) throws UserNotFoundException {
     UserModel user = userRepository.findOneByEmail(email);
     if (user == null) {
-        throw new UserNotFoundException("User Not Found", email);
+      throw new UserNotFoundException("User Not Found", email);
     }
+
     return user;
   }
+
+  // public
 
   public long countUsers() {
     return userRepository.count();
@@ -43,5 +48,4 @@ public class QueryResolver implements GraphQLQueryResolver {
   public long countPosts() {
     return postRepository.count();
   }
-
 }

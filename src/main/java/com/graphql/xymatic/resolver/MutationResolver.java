@@ -21,13 +21,8 @@ public class MutationResolver implements GraphQLMutationResolver {
   }
 
   public UserModel newUser(String name, String password, String email) {
-    UserModel userModel = new UserModel();
-
-    userModel.setName(name);
-    userModel.setEmail(email);
-    userModel.setPassword(password);
+    UserModel userModel = new UserModel(name, email, password);
     userRepository.save(userModel);
-
     return userModel;
   }
 
@@ -36,7 +31,7 @@ public class MutationResolver implements GraphQLMutationResolver {
 
     postModel.setTitle(title);
     postModel.setContent(content);
-    postModel.setUser(new UserModel(userId));
+    // postModel.setUser(new UserModel(userId));
 
     postRepository.save(postModel);
 

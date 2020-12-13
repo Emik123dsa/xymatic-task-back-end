@@ -6,7 +6,7 @@ public enum PeriodEnums {
   DAY("1 day"),
   MONTH("1 month"),
   YEAR("1 year"),
-  ALL("1 month");
+  ALL("1 year");
 
   private String period;
 

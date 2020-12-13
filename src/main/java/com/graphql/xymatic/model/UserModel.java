@@ -1,7 +1,8 @@
 package com.graphql.xymatic.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import javax.persistence.*;
 
 @Entity
@@ -15,30 +16,35 @@ public class UserModel implements Serializable {
   private Long id;
 
   @Column(name = "name")
-  private String name;
+  private final String name;
 
   @Column(name = "email")
-  private String email;
+  private final String email;
 
   @Column(name = "password")
-  private String password;
+  private final String password;
 
-  @Column(name = "created_at")
+  @JsonFormat(
+    shape = JsonFormat.Shape.STRING,
+    pattern = "yyyy-MM-dd HH:mm:ss.SSS"
+  )
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(name = "created_at", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
   private Date createdAt;
 
-  @Column(name = "updated_at")
+  @JsonFormat(
+    shape = JsonFormat.Shape.STRING,
+    pattern = "yyyy-MM-dd HH:mm:ss.SSS"
+  )
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(name = "updated_at", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
   private Date updatedAt;
 
-  public UserModel() {}
-
-  public UserModel(Long id) {
-    this.id = id;
-  }
-
-  public UserModel(String name, String email, String password) {
+  public UserModel(String name, String password, String email) {
     this.name = name;
-    this.email = email;
+
     this.password = password;
+    this.email = email;
   }
 
   public Long getId() {
@@ -53,20 +59,8 @@ public class UserModel implements Serializable {
     return name;
   }
 
-  public void setName(String name) {
-    this.name = name;
-  }
-
   public String getEmail() {
     return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
   }
 
   public String getPassword() {

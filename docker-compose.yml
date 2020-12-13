@@ -11,7 +11,7 @@ services:
     networks:
       - xymatic-network
   nginx:
-    container_name: portfolio-nginx
+    container_name: "xymatic-nginx"
     restart: unless-stopped
     tty: true
     image: nginx:latest
@@ -21,6 +21,7 @@ services:
     volumes:
       - "./conf.d:/etc/nginx/conf.d/"
     depends_on:
+      - db
       - tomcat
     networks:
       - xymatic-network

@@ -1,4 +1,4 @@
 type Subscribe {
-  count: Long!
+  delta: Long!
   timestamp: String!
 }

@@ -7,16 +7,16 @@ public class SubscribeModel implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  private final Long count;
+  private final Long delta;
   private final LocalDateTime timestamp;
 
-  public SubscribeModel(Long count, LocalDateTime timestamp) {
+  public SubscribeModel(Long delta, LocalDateTime timestamp) {
     this.timestamp = timestamp;
-    this.count = count;
+    this.delta = delta;
   }
 
   public Long getCount() {
-    return this.count;
+    return this.delta;
   }
 
   public LocalDateTime getLocalDateTime() {

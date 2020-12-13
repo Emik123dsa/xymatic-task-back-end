@@ -11,7 +11,6 @@ import com.graphql.xymatic.resolver.SubscriptionResolver;
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQLError;
 import graphql.servlet.GraphQLErrorHandler;
-
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -30,6 +29,7 @@ public class XymaticApplication implements CommandLineRunner {
   private static final Logger logger = LoggerFactory.getLogger(
     XymaticApplication.class
   );
+
   public static void main(String[] args) {
     SpringApplication.run(XymaticApplication.class, args);
   }

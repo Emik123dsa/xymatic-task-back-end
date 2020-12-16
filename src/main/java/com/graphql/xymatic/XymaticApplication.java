@@ -22,7 +22,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 
+@ComponentScan
 @SpringBootApplication
 public class XymaticApplication implements CommandLineRunner {
 
@@ -76,8 +78,11 @@ public class XymaticApplication implements CommandLineRunner {
    * @return
    */
   @Bean
-  public SubscriptionResolver subscription(UserRepository userRepository) {
-    return new SubscriptionResolver(userRepository);
+  public SubscriptionResolver subscription(
+    UserRepository userRepository,
+    PostRepository postRepository
+  ) {
+    return new SubscriptionResolver(userRepository, postRepository);
   }
 
   /**

@@ -1,6 +1,7 @@
 package com.graphql.xymatic.repository;
 
 import com.graphql.xymatic.enums.PeriodEnums;
+import com.graphql.xymatic.enums.TableEnums;
 import com.graphql.xymatic.model.ChartModel;
 import java.util.*;
 import java.util.Vector;
@@ -44,8 +45,7 @@ public class JdbcChartRepository implements ChartRepository {
     }
   }
 
-  @Override
-  public List<ChartModel> findUserChart(PeriodEnums pEnums) {
+  private final String queryBuilder(String table, PeriodEnums pEnums) {
     StringBuffer stringBuffer = new StringBuffer();
 
     ArrayList<String> queryBuilder = new ArrayList<String>();
@@ -54,17 +54,21 @@ public class JdbcChartRepository implements ChartRepository {
     queryBuilder.add("(");
     queryBuilder.add(coercedTimeInterval(pEnums));
     queryBuilder.add("(");
-    queryBuilder.add(
-      "SELECT min(created_at) AS created_at FROM xt_users LIMIT 1"
-    );
+    queryBuilder.add("SELECT min(created_at) AS created_at FROM");
+    queryBuilder.add(table);
+    queryBuilder.add("LIMIT 1");
     queryBuilder.add(")");
     queryBuilder.add("AS SCHEMA");
     queryBuilder.add(")");
-    queryBuilder.add(
-      "SELECT ddate as timestamp, count(xt_users.*) as delta, sum(count(xt_users.*))"
-    );
+    queryBuilder.add("SELECT ddate as timestamp,");
+    queryBuilder.add("count(");
+    queryBuilder.add(table);
+    queryBuilder.add(".*) as delta, sum(count(");
+    queryBuilder.add(table);
+    queryBuilder.add(".*))");
     queryBuilder.add("over (order by ddate) as deltaTotal");
-    queryBuilder.add("FROM MOCKS LEFT JOIN xt_users");
+    queryBuilder.add("FROM MOCKS LEFT JOIN");
+    queryBuilder.add(table);
     queryBuilder.add("ON created_at >= ddate and created_at < ddate + ddays");
     queryBuilder.add("GROUP BY ddate ORDER BY ddate");
 
@@ -79,8 +83,27 @@ public class JdbcChartRepository implements ChartRepository {
       }
     }
 
+    return stringBuffer.toString();
+  }
+
+  @Override
+  public List<ChartModel> findUserChart(PeriodEnums pEnums) {
     return jdbcTemplate.query(
-      stringBuffer.toString(),
+      queryBuilder(TableEnums.USERS.getTable(), pEnums),
+      new Object[] { pEnums.getPeriod(), pEnums.getPeriod() },
+      (rs, rowNum) ->
+        new ChartModel(
+          rs.getTimestamp("timestamp"),
+          rs.getLong("delta"),
+          rs.getLong("deltaTotal")
+        )
+    );
+  }
+
+  @Override
+  public List<ChartModel> findPostChart(PeriodEnums pEnums) {
+    return jdbcTemplate.query(
+      queryBuilder(TableEnums.POSTS.getTable(), pEnums),
       new Object[] { pEnums.getPeriod(), pEnums.getPeriod() },
       (rs, rowNum) ->
         new ChartModel(

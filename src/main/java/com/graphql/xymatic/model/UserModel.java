@@ -30,7 +30,6 @@ public class UserModel implements Serializable {
     shape = JsonFormat.Shape.STRING,
     pattern = "yyyy-MM-dd HH:mm:ss.SSS"
   )
-  //@Temporal(TemporalType.TIMESTAMP)
   @Column(name = "created_at", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
   private LocalDateTime createdAt;
 
@@ -38,7 +37,6 @@ public class UserModel implements Serializable {
     shape = JsonFormat.Shape.STRING,
     pattern = "yyyy-MM-dd HH:mm:ss.SSS"
   )
-  //@Temporal(TemporalType.TIMESTAMP)
   @Column(name = "updated_at", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
   private LocalDateTime updatedAt;
 

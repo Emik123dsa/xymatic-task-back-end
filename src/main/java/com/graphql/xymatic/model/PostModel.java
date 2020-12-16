@@ -1,6 +1,8 @@
 package com.graphql.xymatic.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import javax.persistence.*;
 
 @Entity
@@ -17,9 +19,23 @@ public class PostModel implements Serializable {
 
   private String content;
 
+  @JsonFormat(
+    shape = JsonFormat.Shape.STRING,
+    pattern = "yyyy-MM-dd HH:mm:ss.SSS"
+  )
+  @Column(name = "created_at", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+  private LocalDateTime createdAt;
+
+  @JsonFormat(
+    shape = JsonFormat.Shape.STRING,
+    pattern = "yyyy-MM-dd HH:mm:ss.SSS"
+  )
+  @Column(name = "updated_at", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+  private LocalDateTime updatedAt;
+
   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  @JoinColumn(name = "user_id", nullable = false, updatable = false)
-  private UserModel user;
+  @JoinColumn(name = "author", nullable = false, updatable = false)
+  private UserModel author;
 
   public PostModel() {}
 
@@ -53,11 +69,27 @@ public class PostModel implements Serializable {
   }
 
   public UserModel getUser() {
-    return user;
+    return author;
   }
 
   public void setUser(UserModel user) {
-    this.user = user;
+    this.author = user;
+  }
+
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public void setUpdatedAt(LocalDateTime updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public LocalDateTime setUpdatedAt() {
+    return updatedAt;
   }
 
   @Override

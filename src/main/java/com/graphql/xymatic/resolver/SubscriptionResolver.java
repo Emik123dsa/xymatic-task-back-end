@@ -3,6 +3,7 @@ package com.graphql.xymatic.resolver;
 import com.coxautodev.graphql.tools.GraphQLSubscriptionResolver;
 import com.graphql.xymatic.model.SubscribeModel;
 import com.graphql.xymatic.model.UserModel;
+import com.graphql.xymatic.repository.PostRepository;
 import com.graphql.xymatic.repository.UserRepository;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -19,9 +20,14 @@ public class SubscriptionResolver implements GraphQLSubscriptionResolver {
   );
 
   private final UserRepository userRepository;
+  private final PostRepository postRepository;
 
-  public SubscriptionResolver(UserRepository userRepository) {
+  public SubscriptionResolver(
+    UserRepository userRepository,
+    PostRepository postRepository
+  ) {
     this.userRepository = userRepository;
+    this.postRepository = postRepository;
   }
 
   public Publisher<SubscribeModel> userSubscribe() {
@@ -36,7 +42,7 @@ public class SubscriptionResolver implements GraphQLSubscriptionResolver {
     return Flux
       .interval(Duration.ofSeconds(1))
       .map(
-        num -> new SubscribeModel(userRepository.count(), LocalDateTime.now())
+        num -> new SubscribeModel(postRepository.count(), LocalDateTime.now())
       );
   }
 

@@ -10,8 +10,14 @@ import com.graphql.xymatic.repository.ChartRepository;
 import com.graphql.xymatic.repository.PostRepository;
 import com.graphql.xymatic.repository.UserRepository;
 import java.util.List;
+import org.slf4j.*;
+import org.springframework.data.domain.*;
 
 public class QueryResolver implements GraphQLQueryResolver {
+
+  private static final Logger logger = LoggerFactory.getLogger(
+    QueryResolver.class
+  );
 
   private final PostRepository postRepository;
 
@@ -39,6 +45,7 @@ public class QueryResolver implements GraphQLQueryResolver {
 
   public UserModel findUserByEmail(String email) throws UserNotFoundException {
     UserModel user = userRepository.findOneByEmail(email);
+
     if (user == null) {
       throw new UserNotFoundException("User Not Found", email);
     }
@@ -51,7 +58,20 @@ public class QueryResolver implements GraphQLQueryResolver {
   }
 
   public Iterable<ChartModel> findPostByChart(PeriodEnums pEnums) {
-    return chartRepository.findUserChart(pEnums);
+    return chartRepository.findPostChart(pEnums);
+  }
+
+  public List<PostModel> findPostsByEmail(String email)
+    throws UserNotFoundException {
+    UserModel user = userRepository.findOneByEmail(email);
+
+    if (user == null) {
+      throw new UserNotFoundException("User Not Found", email);
+    }
+
+    final Sort directSort = Sort.by(Sort.Direction.DESC, "createdAt");
+
+    return postRepository.findAllByAuthor(user, directSort);
   }
 
   public long countUsers() {

@@ -9,6 +9,7 @@ type User {
 }
 
 type Query {
+  findUserByEmail(email: String!): User!
   findAllUsers: [User]!
   countUsers: Long!
   findUserByChart(period: Period): [Chart]!

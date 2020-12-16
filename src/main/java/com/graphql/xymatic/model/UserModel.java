@@ -1,7 +1,9 @@
 package com.graphql.xymatic.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.graphql.xymatic.enums.StatusEnums;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import javax.persistence.*;
 
@@ -28,21 +30,30 @@ public class UserModel implements Serializable {
     shape = JsonFormat.Shape.STRING,
     pattern = "yyyy-MM-dd HH:mm:ss.SSS"
   )
-  @Temporal(TemporalType.TIMESTAMP)
+  //@Temporal(TemporalType.TIMESTAMP)
   @Column(name = "created_at", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-  private Date createdAt;
+  private LocalDateTime createdAt;
 
   @JsonFormat(
     shape = JsonFormat.Shape.STRING,
     pattern = "yyyy-MM-dd HH:mm:ss.SSS"
   )
-  @Temporal(TemporalType.TIMESTAMP)
+  //@Temporal(TemporalType.TIMESTAMP)
   @Column(name = "updated_at", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-  private Date updatedAt;
+  private LocalDateTime updatedAt;
+
+  @Column(name = "status")
+  private String status;
+
+  @Deprecated
+  public UserModel() {
+    this.name = null;
+    this.password = null;
+    this.email = null;
+  }
 
   public UserModel(String name, String password, String email) {
     this.name = name;
-
     this.password = password;
     this.email = email;
   }
@@ -67,20 +78,29 @@ public class UserModel implements Serializable {
     return password;
   }
 
-  public void setCreatedAt(Date createdAt) {
+  public void setCreatedAt(LocalDateTime createdAt) {
     this.createdAt = createdAt;
   }
 
-  public void setUpdatedAt(Date updatedAt) {
+  public void setUpdatedAt(LocalDateTime updatedAt) {
     this.updatedAt = updatedAt;
   }
 
-  public Date getCreatedAt() {
+  public LocalDateTime getCreatedAt() {
     return createdAt;
   }
 
-  public Date setUpdatedAt() {
+  public LocalDateTime setUpdatedAt() {
     return updatedAt;
+  }
+
+  public void setStatus(StatusEnums sEnums) {
+    String aStatus = sEnums.getStatus();
+    this.status = aStatus;
+  }
+
+  public String getStatus() {
+    return status;
   }
 
   @Override

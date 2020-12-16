@@ -2,7 +2,7 @@ package com.graphql.xymatic.enums;
 
 public enum PeriodEnums {
   TODAY("1 hour"),
-  YESTERDAY("1 hour - 1 day"),
+  YESTERDAY("1 hour"),
   DAY("1 day"),
   MONTH("1 month"),
   YEAR("1 year"),

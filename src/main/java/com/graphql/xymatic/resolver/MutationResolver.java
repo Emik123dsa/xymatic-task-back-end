@@ -5,6 +5,7 @@ import com.graphql.xymatic.model.PostModel;
 import com.graphql.xymatic.model.UserModel;
 import com.graphql.xymatic.repository.PostRepository;
 import com.graphql.xymatic.repository.UserRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 public class MutationResolver implements GraphQLMutationResolver {
 
@@ -20,6 +21,7 @@ public class MutationResolver implements GraphQLMutationResolver {
     this.postRepository = postRepository;
   }
 
+  @PreAuthorize("isAnonymous()")
   public UserModel newUser(String name, String password, String email) {
     UserModel userModel = new UserModel(name, email, password);
     userRepository.save(userModel);

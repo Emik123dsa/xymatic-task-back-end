@@ -1,21 +1,26 @@
 package com.graphql.xymatic;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.graphql.xymatic.adapters.GraphQLErrorAdapter;
 import com.graphql.xymatic.repository.ChartRepository;
 import com.graphql.xymatic.repository.PostRepository;
 import com.graphql.xymatic.repository.UserRepository;
 import com.graphql.xymatic.resolver.MutationResolver;
-import com.graphql.xymatic.resolver.PostResolver;
 import com.graphql.xymatic.resolver.QueryResolver;
 import com.graphql.xymatic.resolver.SubscriptionResolver;
+import com.graphql.xymatic.service.UserService;
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQLError;
+import graphql.schema.GraphQLScalarType;
 import graphql.servlet.GraphQLErrorHandler;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.servlet.Filter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -23,11 +28,18 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ComponentScan
 @SpringBootApplication
 public class XymaticApplication implements CommandLineRunner {
 
+  private final String jwtSecret = "XYMATIC";
   private static final Logger logger = LoggerFactory.getLogger(
     XymaticApplication.class
   );
@@ -112,5 +124,14 @@ public class XymaticApplication implements CommandLineRunner {
     PostRepository postRepository
   ) {
     return new MutationResolver(userRepository, postRepository);
+  }
+  
+  /**
+   *  Open Filter Entity Manager
+   * @return
+   */
+  @Bean 
+  public Filter openFilter() {
+    return new OpenEntityManagerInViewFilter();
   }
 }

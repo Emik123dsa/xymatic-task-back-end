@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Random;
 import org.reactivestreams.*;
 import org.slf4j.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import reactor.core.publisher.*;
 
 public class SubscriptionResolver implements GraphQLSubscriptionResolver {
@@ -30,6 +31,7 @@ public class SubscriptionResolver implements GraphQLSubscriptionResolver {
     this.postRepository = postRepository;
   }
 
+  @PreAuthorize("isAnonymous()")
   public Publisher<SubscribeModel> userSubscribe() {
     return Flux
       .interval(Duration.ofSeconds(1))

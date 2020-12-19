@@ -10,17 +10,19 @@ import com.graphql.xymatic.repository.UserRepository;
 import com.graphql.xymatic.resolver.MutationResolver;
 import com.graphql.xymatic.resolver.QueryResolver;
 import com.graphql.xymatic.resolver.SubscriptionResolver;
+import com.graphql.xymatic.service.ChartService;
+import com.graphql.xymatic.service.PostService;
 import com.graphql.xymatic.service.UserService;
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQLError;
 import graphql.schema.GraphQLScalarType;
 import graphql.servlet.GraphQLErrorHandler;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import javax.servlet.Filter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -30,16 +32,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ComponentScan
 @SpringBootApplication
 public class XymaticApplication implements CommandLineRunner {
 
-  private final String jwtSecret = "XYMATIC";
   private static final Logger logger = LoggerFactory.getLogger(
     XymaticApplication.class
   );
@@ -105,11 +102,17 @@ public class XymaticApplication implements CommandLineRunner {
    */
   @Bean
   public QueryResolver query(
-    UserRepository userRepository,
-    PostRepository postRepository,
-    ChartRepository chartRepository
+    AuthenticationProvider authenticationProvider,
+    UserService userService,
+    PostService postService,
+    ChartService chartService
   ) {
-    return new QueryResolver(userRepository, postRepository, chartRepository);
+    return new QueryResolver(
+      authenticationProvider,
+      userService,
+      postService,
+      chartService
+    );
   }
 
   /**
@@ -120,18 +123,28 @@ public class XymaticApplication implements CommandLineRunner {
    */
   @Bean
   public MutationResolver mutation(
-    UserRepository userRepository,
+    UserService userService,
     PostRepository postRepository
   ) {
-    return new MutationResolver(userRepository, postRepository);
+    return new MutationResolver(userService, postRepository);
   }
-  
+
   /**
    *  Open Filter Entity Manager
    * @return
    */
-  @Bean 
+  @Bean
   public Filter openFilter() {
     return new OpenEntityManagerInViewFilter();
+  }
+
+  /**
+   * Message Digestion
+   * @return
+   * @throws NoSuchAlgorithmException
+   */
+  @Bean
+  public MessageDigest messageDigest() throws NoSuchAlgorithmException {
+    return MessageDigest.getInstance("SHA1");
   }
 }

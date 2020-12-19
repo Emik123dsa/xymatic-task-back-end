@@ -1,12 +1,3 @@
-enum Period {
-  TODAY
-  YESTERDAY
-  DAY
-  MONTH
-  YEAR
-  ALL
-}
-
 type Chart {
   timestamp: String!
   delta: Long!

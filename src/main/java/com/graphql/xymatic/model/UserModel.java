@@ -1,10 +1,13 @@
 package com.graphql.xymatic.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.graphql.xymatic.enums.RoleEnums;
 import com.graphql.xymatic.enums.StatusEnums;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 import javax.persistence.*;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name = "xt_users")
@@ -14,16 +17,30 @@ public class UserModel implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @EqualsAndHashCode.Include
   private Long id;
 
   @Column(name = "name")
+  @EqualsAndHashCode.Include
   private final String name;
 
   @Column(name = "email")
+  @EqualsAndHashCode.Include
   private final String email;
 
   @Column(name = "password")
+  @EqualsAndHashCode.Include
   private final String password;
+
+  @ElementCollection
+  @CollectionTable(
+    name = "xt_roles",
+    joinColumns = @JoinColumn(name = "author")
+  )
+  @Column(name = "name")
+  @Transient
+  @Enumerated(EnumType.STRING)
+  private Set<RoleEnums> roles;
 
   @JsonFormat(
     shape = JsonFormat.Shape.STRING,
@@ -40,7 +57,9 @@ public class UserModel implements Serializable {
   private LocalDateTime updatedAt;
 
   @Column(name = "status")
-  private String status;
+  @Transient
+  @Enumerated(EnumType.STRING)
+  private StatusEnums status;
 
   @Deprecated
   public UserModel() {
@@ -49,10 +68,10 @@ public class UserModel implements Serializable {
     this.email = null;
   }
 
-  public UserModel(String name, String password, String email) {
-    this.name = name;
-    this.password = password;
+  public UserModel(String email, String password, String name) {
     this.email = email;
+    this.password = password;
+    this.name = name;
   }
 
   public Long getId() {
@@ -92,12 +111,23 @@ public class UserModel implements Serializable {
   }
 
   public void setStatus(StatusEnums sEnums) {
-    String aStatus = sEnums.getStatus();
-    this.status = aStatus;
+    this.status = sEnums;
   }
 
-  public String getStatus() {
+  public StatusEnums getStatus() {
     return status;
+  }
+
+  public Set<RoleEnums> getRoles() {
+    return roles;
+  }
+
+  /**
+   * Setting Roles accordignly to the RoleEnums credentials
+   * @param roles
+   */
+  public void setRoles(Set<RoleEnums> roles) {
+    this.roles = roles;
   }
 
   @Override

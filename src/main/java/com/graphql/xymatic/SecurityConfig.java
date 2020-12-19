@@ -15,18 +15,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig {
 
   @Bean
-  public Algorithm jwtAlgorithm() {
-    return Algorithm.HMAC256("secret");
+  public Algorithm jwtAlgorithm(SecurityProperties security) {
+    return Algorithm.HMAC256(security.getTokenSecret());
   }
 
   @Bean
-  public JWTVerifier verifier(Algorithm algorithm) {
-    return JWT.require(algorithm).withIssuer("/graphql").build();
+  public JWTVerifier verifier(
+    SecurityProperties security,
+    Algorithm algorithm
+  ) {
+    return JWT.require(algorithm).withIssuer(security.getTokenIssuer()).build();
   }
 
   @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder(10);
+  public PasswordEncoder passwordEncoder(SecurityProperties security) {
+    return new BCryptPasswordEncoder(security.getTokenStrengthness());
   }
 
   @Bean

@@ -1,12 +1,9 @@
 package com.graphql.xymatic.model;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +19,7 @@ public class JWTUserDetails implements UserDetails {
   private final String username;
   private final String password;
   private final String token;
-  private final Set<? extends GrantedAuthority> authorities;
+  private final List<SimpleGrantedAuthority> authorities;
 
   @Override
   public boolean isAccountNonExpired() {
@@ -52,9 +49,5 @@ public class JWTUserDetails implements UserDetails {
   @Override
   public String getUsername() {
     return username;
-  }
-
-  public String getToken() {
-    return token;
   }
 }

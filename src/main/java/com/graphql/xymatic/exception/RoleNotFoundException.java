@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class UserNotFoundException
+public class RoleNotFoundException
   extends RuntimeException
   implements GraphQLError {
 
@@ -15,9 +15,9 @@ public class UserNotFoundException
 
   private Map<String, Object> extensions = new HashMap<>();
 
-  public UserNotFoundException(String message, String user) {
+  public RoleNotFoundException(String message, Long invalidId) {
     super(message);
-    extensions.put("invalidUser: ", user);
+    extensions.put("invalidRole: ", invalidId);
   }
 
   @Override

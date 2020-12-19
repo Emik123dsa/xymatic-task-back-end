@@ -18,8 +18,9 @@ public class RoleModel implements Serializable {
   @JoinColumn(name = "author", nullable = false, updatable = false)
   private UserModel author;
 
-  @Column(name = "role")
-  private String role;
+  @Enumerated(EnumType.STRING)
+  @Column(name = "name")
+  private RoleEnums name;
 
   public RoleModel() {}
 
@@ -31,19 +32,19 @@ public class RoleModel implements Serializable {
     this.id = id;
   }
 
+  public RoleEnums getName() {
+    return name;
+  }
+
+  public void setName(RoleEnums name) {
+    this.name = name;
+  }
+
   public UserModel getAuthor() {
     return author;
   }
 
-  public void setAuthor(UserModel author) {
-    this.author = author;
-  }
-
-  public String getRole() {
-    return role;
-  }
-
-  public void setRole(RoleEnums rEnums) {
-    this.role = rEnums.getRole();
+  public void setAuthor(UserModel userModel) {
+    this.author = userModel;
   }
 }

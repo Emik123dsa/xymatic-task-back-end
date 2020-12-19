@@ -1,0 +1,27 @@
+package com.graphql.xymatic.service;
+
+import com.graphql.xymatic.enums.PeriodEnums;
+import com.graphql.xymatic.model.ChartModel;
+import com.graphql.xymatic.repository.ChartRepository;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ChartService {
+
+  private final ChartRepository chartRepository;
+
+  @Autowired
+  public ChartService(ChartRepository chartRepository) {
+    this.chartRepository = chartRepository;
+  }
+
+  public List<ChartModel> findUserChart(PeriodEnums periodEnums) {
+    return chartRepository.findUserChart(periodEnums);
+  }
+
+  public List<ChartModel> findPostChart(PeriodEnums periodEnums) {
+    return chartRepository.findPostChart(periodEnums);
+  }
+}

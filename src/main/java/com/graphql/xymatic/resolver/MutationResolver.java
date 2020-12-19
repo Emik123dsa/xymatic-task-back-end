@@ -1,33 +1,35 @@
 package com.graphql.xymatic.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
+import com.graphql.xymatic.exception.UserExistsException;
 import com.graphql.xymatic.model.PostModel;
+import com.graphql.xymatic.model.UserInput;
 import com.graphql.xymatic.model.UserModel;
 import com.graphql.xymatic.repository.PostRepository;
 import com.graphql.xymatic.repository.UserRepository;
+import com.graphql.xymatic.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 public class MutationResolver implements GraphQLMutationResolver {
 
-  private final UserRepository userRepository;
+  private final UserService userService;
 
   private final PostRepository postRepository;
 
   public MutationResolver(
-    UserRepository userRepository,
+    UserService userService,
     PostRepository postRepository
   ) {
-    this.userRepository = userRepository;
+    this.userService = userService;
     this.postRepository = postRepository;
   }
 
   @PreAuthorize("isAnonymous()")
-  public UserModel newUser(String name, String password, String email) {
-    UserModel userModel = new UserModel(name, email, password);
-    userRepository.save(userModel);
-    return userModel;
+  public UserModel newUser(UserInput userInput) throws UserExistsException {
+    return userService.createNewUser(userInput);
   }
 
+  @PreAuthorize("isAuthenticated()")
   public PostModel newPost(String title, String content, Long userId) {
     PostModel postModel = new PostModel();
 
@@ -40,6 +42,7 @@ public class MutationResolver implements GraphQLMutationResolver {
     return postModel;
   }
 
+  @PreAuthorize("isAuthenticated()")
   public boolean deletePost(Long id) {
     postRepository.deleteById(id);
     return true;

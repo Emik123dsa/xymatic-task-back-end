@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class UserNotFoundException
+public class UserExistsException
   extends RuntimeException
   implements GraphQLError {
 
@@ -15,9 +15,9 @@ public class UserNotFoundException
 
   private Map<String, Object> extensions = new HashMap<>();
 
-  public UserNotFoundException(String message, String user) {
+  public UserExistsException(String message, String user) {
     super(message);
-    extensions.put("invalidUser: ", user);
+    extensions.put("User Exists: ", user);
   }
 
   @Override

@@ -3,3 +3,24 @@ schema {
   mutation: Mutation
   subscription: Subscription
 }
+
+enum RoleName {
+  USER
+  ADMIN
+}
+
+enum StatusName {
+  active
+  closed
+  pending
+  deleted
+}
+
+enum Period {
+  TODAY
+  YESTERDAY
+  DAY
+  MONTH
+  YEAR
+  ALL
+}

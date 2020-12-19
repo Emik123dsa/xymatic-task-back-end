@@ -14,6 +14,8 @@ public class SecurityProperties {
 
   private final Duration tokenExpiration = Duration.ofHours(24);
 
+  private final Integer tokenStrengthness = 10;
+
   public SecurityProperties(String tokenSecret, String tokenIssuer) {
     this.tokenSecret = tokenSecret;
     this.tokenIssuer = tokenIssuer;
@@ -29,5 +31,9 @@ public class SecurityProperties {
 
   public Duration getTokenExpriation() {
     return tokenExpiration;
+  }
+
+  public Integer getTokenStrengthness() {
+    return tokenStrengthness;
   }
 }

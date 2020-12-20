@@ -24,3 +24,13 @@ enum Period {
   YEAR
   ALL
 }
+
+enum DateSort {
+  CREATED_AT
+  UPDATED_AT
+}
+
+enum DirectionSort {
+  ASC
+  DESC
+}

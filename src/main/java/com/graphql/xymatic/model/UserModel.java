@@ -8,9 +8,13 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import javax.persistence.*;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.Transient;
 
 @Entity
 @Table(name = "xt_users")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class UserModel implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -32,33 +36,37 @@ public class UserModel implements Serializable {
   @EqualsAndHashCode.Include
   private final String password;
 
+  @Enumerated(EnumType.STRING)
   @ElementCollection
   @CollectionTable(
     name = "xt_roles",
     joinColumns = @JoinColumn(name = "author")
   )
-  @Column(name = "name")
-  @Transient
-  @Enumerated(EnumType.STRING)
+  @Column(name = "name", nullable = false)
   private Set<RoleEnums> roles;
 
   @JsonFormat(
     shape = JsonFormat.Shape.STRING,
     pattern = "yyyy-MM-dd HH:mm:ss.SSS"
   )
-  @Column(name = "created_at", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+  @CreationTimestamp
+  @Column(
+    name = "created_at",
+    columnDefinition = "TIMESTAMP WITHOUT TIME ZONE",
+    updatable = false
+  )
   private LocalDateTime createdAt;
 
   @JsonFormat(
     shape = JsonFormat.Shape.STRING,
     pattern = "yyyy-MM-dd HH:mm:ss.SSS"
   )
+  @UpdateTimestamp
   @Column(name = "updated_at", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
   private LocalDateTime updatedAt;
 
-  @Column(name = "status")
-  @Transient
   @Enumerated(EnumType.STRING)
+  @Column(name = "status", nullable = false)
   private StatusEnums status;
 
   @Deprecated
@@ -128,21 +136,5 @@ public class UserModel implements Serializable {
    */
   public void setRoles(Set<RoleEnums> roles) {
     this.roles = roles;
-  }
-
-  @Override
-  public boolean equals(Object object) {
-    if (this == object) return true;
-
-    if (object == null || getClass() != object.getClass()) return false;
-
-    UserModel userModel = (UserModel) object;
-
-    return id.equals(userModel.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return id.hashCode();
   }
 }

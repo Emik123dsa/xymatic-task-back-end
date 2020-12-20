@@ -7,21 +7,18 @@ import com.graphql.xymatic.model.UserInput;
 import com.graphql.xymatic.model.UserModel;
 import com.graphql.xymatic.repository.PostRepository;
 import com.graphql.xymatic.repository.UserRepository;
+import com.graphql.xymatic.service.PostService;
 import com.graphql.xymatic.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 public class MutationResolver implements GraphQLMutationResolver {
 
   private final UserService userService;
+  private final PostService postService;
 
-  private final PostRepository postRepository;
-
-  public MutationResolver(
-    UserService userService,
-    PostRepository postRepository
-  ) {
+  public MutationResolver(UserService userService, PostService postService) {
     this.userService = userService;
-    this.postRepository = postRepository;
+    this.postService = postService;
   }
 
   @PreAuthorize("isAnonymous()")
@@ -37,14 +34,14 @@ public class MutationResolver implements GraphQLMutationResolver {
     postModel.setContent(content);
     // postModel.setUser(new UserModel(userId));
 
-    postRepository.save(postModel);
+    // postService.save(postModel);
 
     return postModel;
   }
 
   @PreAuthorize("isAuthenticated()")
   public boolean deletePost(Long id) {
-    postRepository.deleteById(id);
+    postService.deleteById(id);
     return true;
   }
 }

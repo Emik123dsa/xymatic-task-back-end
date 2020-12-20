@@ -12,7 +12,7 @@ import com.graphql.xymatic.repository.UserRepository;
 import com.graphql.xymatic.service.ChartService;
 import com.graphql.xymatic.service.PostService;
 import com.graphql.xymatic.service.UserService;
-import com.graphql.xymatic.sort.DirectionSort;
+import com.graphql.xymatic.sort.PostSort;
 import java.util.Arrays;
 import java.util.List;
 import org.slf4j.*;
@@ -48,8 +48,17 @@ public class QueryResolver implements GraphQLQueryResolver {
     this.authentication = authentication;
   }
 
-  public Iterable<PostModel> findAllPosts() {
-    return postService.findAll();
+  public Iterable<PostModel> findAllPosts(
+    Integer page,
+    Integer size,
+    PostSort sort
+  ) {
+    PageRequest request = PageRequest.of(
+      page,
+      size,
+      sort == null ? Sort.unsorted() : sort.getSort()
+    );
+    return postService.findAll(request);
   }
 
   public Iterable<UserModel> findAllUsers() {
@@ -58,8 +67,8 @@ public class QueryResolver implements GraphQLQueryResolver {
 
   @PreAuthorize("isAuthenticated()")
   public UserModel findUserByEmail(String email) throws UserNotFoundException {
-    // UserModel user = userService.findOneByEmail(email);
-    UserModel user = userService.getCurrentUser();
+    UserModel user = userService.findOneByEmail(email);
+    //UserModel user = userService.getCurrentUser();
 
     return user;
   }
@@ -72,21 +81,18 @@ public class QueryResolver implements GraphQLQueryResolver {
     return chartService.findPostChart(pEnums);
   }
 
-  public List<PostModel> findPostsByEmail(String email)
-    throws UserNotFoundException {
-    UserModel user = userService.findOneByEmail(email);
+  // public List<PostModel> findPostsByEmail(String email, int page, int size, PostSort sort)
+  //   throws UserNotFoundException {
+  //   UserModel user = userService.findOneByEmail(email);
 
-    if (user == null) {
-      throw new UserNotFoundException("User Not Found", email);
-    }
+  //   if (user == null) {
+  //     throw new UserNotFoundException("User Not Found", email);
+  //   }
 
-    final Sort directSort = Sort.by(
-      DirectionSort.ASC.getDirection(),
-      "createdAt"
-    );
+  //   PageRequest pageRequest = PageRequest.of(page, size, sort == null ? Sort.unsorted() : sort.getSort());
 
-    return postService.findAllByAuthor(user, directSort);
-  }
+  //   return postService.findAllByAuthor(user, pageRequest);
+  // }
 
   @PreAuthorize("isAnonymous()")
   public UserModel signIn(String email, String password)

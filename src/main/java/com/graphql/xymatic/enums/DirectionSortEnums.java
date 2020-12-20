@@ -1,14 +1,14 @@
-package com.graphql.xymatic.sort;
+package com.graphql.xymatic.enums;
 
 import org.springframework.data.domain.*;
 
-public enum DirectionSort {
+public enum DirectionSortEnums {
   ASC(Sort.Direction.ASC),
   DESC(Sort.Direction.DESC);
 
   private final Sort.Direction direction;
 
-  DirectionSort(Sort.Direction direction) {
+  DirectionSortEnums(Sort.Direction direction) {
     this.direction = direction;
   }
 

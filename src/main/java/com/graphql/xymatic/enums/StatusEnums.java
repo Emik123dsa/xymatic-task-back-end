@@ -2,7 +2,6 @@ package com.graphql.xymatic.enums;
 
 import java.util.stream.Stream;
 
-
 public enum StatusEnums {
   active("active"),
   closed("closed"),
@@ -18,11 +17,11 @@ public enum StatusEnums {
   public String getStatus() {
     return status;
   }
-
-  public static StatusEnums of(String priority) {
-    return Stream.of(StatusEnums.values())
-      .filter(p -> p.getStatus() == priority) 
-      .findFirst()
-      .orElseThrow(IllegalArgumentException::new);
-  }
+  // public static StatusEnums of(String priority) {
+  //   return Stream
+  //     .of(StatusEnums.values())
+  //     .filter(p -> p.getStatus() == priority)
+  //     .findFirst()
+  //     .orElseThrow(IllegalArgumentException::new);
+  // }
 }

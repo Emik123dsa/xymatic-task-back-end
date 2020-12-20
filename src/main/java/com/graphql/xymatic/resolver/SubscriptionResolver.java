@@ -2,16 +2,14 @@ package com.graphql.xymatic.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLSubscriptionResolver;
 import com.graphql.xymatic.model.SubscribeModel;
-import com.graphql.xymatic.model.UserModel;
-import com.graphql.xymatic.repository.PostRepository;
-import com.graphql.xymatic.repository.UserRepository;
+import com.graphql.xymatic.service.PostService;
+import com.graphql.xymatic.service.UserService;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Random;
 import org.reactivestreams.*;
 import org.slf4j.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationProvider;
 import reactor.core.publisher.*;
 
 public class SubscriptionResolver implements GraphQLSubscriptionResolver {
@@ -20,47 +18,43 @@ public class SubscriptionResolver implements GraphQLSubscriptionResolver {
     SubscriptionResolver.class
   );
 
-  private final UserRepository userRepository;
-  private final PostRepository postRepository;
+  private final AuthenticationProvider authentication;
+
+  private final UserService userService;
+  private final PostService postService;
 
   public SubscriptionResolver(
-    UserRepository userRepository,
-    PostRepository postRepository
+    AuthenticationProvider authentication,
+    UserService userService,
+    PostService postService
   ) {
-    this.userRepository = userRepository;
-    this.postRepository = postRepository;
+    this.authentication = authentication;
+    this.userService = userService;
+    this.postService = postService;
   }
 
-  @PreAuthorize("isAnonymous()")
+  // @PreAuthorize("isAuthenticated()")
   public Publisher<SubscribeModel> userSubscribe() {
     return Flux
       .interval(Duration.ofSeconds(1))
-      .map(
-        num -> new SubscribeModel(userRepository.count(), LocalDateTime.now())
-      );
+      .map(num -> new SubscribeModel(userService.count(), LocalDateTime.now()));
   }
 
   public Publisher<SubscribeModel> postSubscribe() {
     return Flux
       .interval(Duration.ofSeconds(1))
-      .map(
-        num -> new SubscribeModel(postRepository.count(), LocalDateTime.now())
-      );
+      .map(num -> new SubscribeModel(postService.count(), LocalDateTime.now()));
   }
 
   public Publisher<SubscribeModel> impressionsSubscribe() {
     return Flux
       .interval(Duration.ofSeconds(1))
-      .map(
-        num -> new SubscribeModel(userRepository.count(), LocalDateTime.now())
-      );
+      .map(num -> new SubscribeModel(userService.count(), LocalDateTime.now()));
   }
 
   public Publisher<SubscribeModel> playsSubscribe() {
     return Flux
       .interval(Duration.ofSeconds(1))
-      .map(
-        num -> new SubscribeModel(userRepository.count(), LocalDateTime.now())
-      );
+      .map(num -> new SubscribeModel(userService.count(), LocalDateTime.now()));
   }
 }

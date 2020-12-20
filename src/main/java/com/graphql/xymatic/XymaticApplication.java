@@ -88,10 +88,11 @@ public class XymaticApplication implements CommandLineRunner {
    */
   @Bean
   public SubscriptionResolver subscription(
-    UserRepository userRepository,
-    PostRepository postRepository
+    AuthenticationProvider authentication,
+    UserService userService,
+    PostService postService
   ) {
-    return new SubscriptionResolver(userRepository, postRepository);
+    return new SubscriptionResolver(authentication, userService, postService);
   }
 
   /**
@@ -124,9 +125,9 @@ public class XymaticApplication implements CommandLineRunner {
   @Bean
   public MutationResolver mutation(
     UserService userService,
-    PostRepository postRepository
+    PostService postService
   ) {
-    return new MutationResolver(userService, postRepository);
+    return new MutationResolver(userService, postService);
   }
 
   /**

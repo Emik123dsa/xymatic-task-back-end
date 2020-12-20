@@ -4,7 +4,9 @@ import com.graphql.xymatic.enums.PeriodEnums;
 import com.graphql.xymatic.model.ChartModel;
 import com.graphql.xymatic.repository.ChartRepository;
 import java.util.List;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ChartRepository {
   List<ChartModel> findUserChart(PeriodEnums periodEnums);
   List<ChartModel> findPostChart(PeriodEnums periodEnums);

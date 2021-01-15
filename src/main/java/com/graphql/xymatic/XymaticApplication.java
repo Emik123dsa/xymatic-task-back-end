@@ -1,21 +1,16 @@
 package com.graphql.xymatic;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.graphql.xymatic.adapters.GraphQLErrorAdapter;
-import com.graphql.xymatic.repository.ChartRepository;
-import com.graphql.xymatic.repository.PostRepository;
-import com.graphql.xymatic.repository.UserRepository;
 import com.graphql.xymatic.resolver.MutationResolver;
 import com.graphql.xymatic.resolver.QueryResolver;
 import com.graphql.xymatic.resolver.SubscriptionResolver;
 import com.graphql.xymatic.service.ChartService;
+import com.graphql.xymatic.service.ImpressionsService;
+import com.graphql.xymatic.service.PlayService;
 import com.graphql.xymatic.service.PostService;
 import com.graphql.xymatic.service.UserService;
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQLError;
-import graphql.schema.GraphQLScalarType;
 import graphql.servlet.GraphQLErrorHandler;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -23,8 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.Filter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -36,11 +29,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 @ComponentScan
 @SpringBootApplication
 public class XymaticApplication implements CommandLineRunner {
-
-  private static final Logger logger = LoggerFactory.getLogger(
-    XymaticApplication.class
-  );
-
   public static void main(String[] args) {
     SpringApplication.run(XymaticApplication.class, args);
   }
@@ -63,7 +51,7 @@ public class XymaticApplication implements CommandLineRunner {
           .filter(e -> !isClientError(e))
           .map(GraphQLErrorAdapter::new)
           .collect(Collectors.toList());
-
+        
         List<GraphQLError> e = new ArrayList<>();
         e.addAll(clientErrors);
         e.addAll(serverErrors);
@@ -90,9 +78,11 @@ public class XymaticApplication implements CommandLineRunner {
   public SubscriptionResolver subscription(
     AuthenticationProvider authentication,
     UserService userService,
-    PostService postService
+    PostService postService,
+    ImpressionsService impressionsService, 
+    PlayService playService
   ) {
-    return new SubscriptionResolver(authentication, userService, postService);
+    return new SubscriptionResolver(authentication, userService, postService, impressionsService, playService);
   }
 
   /**
@@ -106,13 +96,15 @@ public class XymaticApplication implements CommandLineRunner {
     AuthenticationProvider authenticationProvider,
     UserService userService,
     PostService postService,
-    ChartService chartService
+    ChartService chartService,
+    ImpressionsService impressionsService
   ) {
     return new QueryResolver(
       authenticationProvider,
       userService,
       postService,
-      chartService
+      chartService,
+      impressionsService
     );
   }
 

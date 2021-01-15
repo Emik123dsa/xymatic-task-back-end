@@ -17,11 +17,4 @@ public enum StatusEnums {
   public String getStatus() {
     return status;
   }
-  // public static StatusEnums of(String priority) {
-  //   return Stream
-  //     .of(StatusEnums.values())
-  //     .filter(p -> p.getStatus() == priority)
-  //     .findFirst()
-  //     .orElseThrow(IllegalArgumentException::new);
-  // }
 }

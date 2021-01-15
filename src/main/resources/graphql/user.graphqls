@@ -21,6 +21,7 @@ type Query {
   countUsers: Long!
   findUserByChart(period: Period): [Chart]!
   signIn(email: String!, password: String!): User!
+  getCurrentUser: User!
 }
 
 type Subscription {

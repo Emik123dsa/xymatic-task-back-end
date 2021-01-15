@@ -48,6 +48,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
+      .cors()
+      .disable()
       .csrf()
       .disable()
       .authorizeRequests()
@@ -84,8 +86,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     CorsConfiguration configuration = new CorsConfiguration();
 
-    configuration.setAllowCredentials(true);
-    configuration.setAllowedHeaders(List.of("*"));
+    configuration.setAllowCredentials(false);
+    configuration.addAllowedOrigin("*");
+    configuration.addAllowedHeader("*");
+    configuration.addAllowedMethod("GET");
+    configuration.addAllowedMethod("PUT");
+    configuration.addAllowedMethod("POST");
+    configuration.addAllowedMethod("OPTIONS");
     configuration.setAllowedMethods(List.of("*"));
     source.registerCorsConfiguration("/**", configuration);
 

@@ -3,7 +3,10 @@ package com.graphql.xymatic.filters;
 import com.graphql.xymatic.SecurityProperties;
 import com.graphql.xymatic.service.UserService;
 import com.graphql.xymatic.utils.JWTPreAuthenticationToken;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,6 +15,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -21,7 +28,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
 public class JWTFilter extends OncePerRequestFilter {
-
+  private static final Logger logger = LoggerFactory.getLogger(JWTFilter.class);
   private static final String AUTHORIZATION_HEADER = "Authorization";
   private static final Pattern BEARER_PATTERN = Pattern.compile(
     "^Bearer (.+?)$"
@@ -43,6 +50,7 @@ public class JWTFilter extends OncePerRequestFilter {
     FilterChain filterChain
   )
     throws IOException, ServletException {
+    
     getToken(request)
       .map(userService::loadUserByToken)
       .map(

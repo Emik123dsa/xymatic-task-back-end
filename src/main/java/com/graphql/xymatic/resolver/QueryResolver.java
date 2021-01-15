@@ -4,12 +4,14 @@ import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.graphql.xymatic.enums.PeriodEnums;
 import com.graphql.xymatic.exception.UserNotFoundException;
 import com.graphql.xymatic.model.ChartModel;
+import com.graphql.xymatic.model.ImpressionsModel;
 import com.graphql.xymatic.model.PostModel;
 import com.graphql.xymatic.model.UserModel;
 import com.graphql.xymatic.repository.ChartRepository;
 import com.graphql.xymatic.repository.PostRepository;
 import com.graphql.xymatic.repository.UserRepository;
 import com.graphql.xymatic.service.ChartService;
+import com.graphql.xymatic.service.ImpressionsService;
 import com.graphql.xymatic.service.PostService;
 import com.graphql.xymatic.service.UserService;
 import com.graphql.xymatic.sort.PostSort;
@@ -35,17 +37,20 @@ public class QueryResolver implements GraphQLQueryResolver {
   private final PostService postService;
   private final UserService userService;
   private final ChartService chartService;
+  private final ImpressionsService impressionsService;
 
   public QueryResolver(
     AuthenticationProvider authentication,
     UserService userService,
     PostService postService,
-    ChartService chartService
+    ChartService chartService,
+    ImpressionsService impressionsService
   ) {
     this.postService = postService;
     this.userService = userService;
     this.chartService = chartService;
     this.authentication = authentication;
+    this.impressionsService = impressionsService;
   }
 
   public Iterable<PostModel> findAllPosts(
@@ -53,12 +58,7 @@ public class QueryResolver implements GraphQLQueryResolver {
     Integer size,
     PostSort sort
   ) {
-    PageRequest request = PageRequest.of(
-      page,
-      size,
-      sort == null ? Sort.unsorted() : sort.getSort()
-    );
-    return postService.findAll(request);
+    return postService.findAll(PageRequest.of(page, size, sort != null ? sort.getSort() : Sort.unsorted()));
   }
 
   public Iterable<UserModel> findAllUsers() {
@@ -68,8 +68,6 @@ public class QueryResolver implements GraphQLQueryResolver {
   @PreAuthorize("isAuthenticated()")
   public UserModel findUserByEmail(String email) throws UserNotFoundException {
     UserModel user = userService.findOneByEmail(email);
-    //UserModel user = userService.getCurrentUser();
-
     return user;
   }
 
@@ -80,6 +78,16 @@ public class QueryResolver implements GraphQLQueryResolver {
   public Iterable<ChartModel> findPostByChart(PeriodEnums pEnums) {
     return chartService.findPostChart(pEnums);
   }
+
+  public Iterable<ChartModel> findImpressionsByChart(PeriodEnums pEnums) {
+    return chartService.findImpressionsChart(pEnums);
+  }
+
+  public Iterable<ChartModel> findPlayByChart(PeriodEnums pEnums) {
+    return chartService.findPlayChart(pEnums);
+  }
+
+  
 
   // public List<PostModel> findPostsByEmail(String email, int page, int size, PostSort sort)
   //   throws UserNotFoundException {
@@ -93,6 +101,10 @@ public class QueryResolver implements GraphQLQueryResolver {
 
   //   return postService.findAllByAuthor(user, pageRequest);
   // }
+
+  public List<ImpressionsModel> findAllImpressions() {
+    return impressionsService.findAll();
+  }
 
   @PreAuthorize("isAnonymous()")
   public UserModel signIn(String email, String password)
@@ -112,6 +124,11 @@ public class QueryResolver implements GraphQLQueryResolver {
   }
 
   @PreAuthorize("isAuthenticated()")
+  public UserModel getCurrentUser() {
+    return userService.getCurrentUser();
+  }
+
+  @PreAuthorize("hasAuthority('ADMIN')")
   public long countUsers() {
     return userService.count();
   }

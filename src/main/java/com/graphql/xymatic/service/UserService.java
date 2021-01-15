@@ -77,14 +77,6 @@ public class UserService implements UserDetailsService {
     this.passwordEncoder = passwordEncoder;
   }
 
-  public List<UserModel> findAll() {
-    return userRepository.findAll();
-  }
-
-  public void saveUser(UserModel user) {
-    userRepository.save(user);
-  }
-
   @Override
   @Transactional(readOnly = true)
   public JWTUserDetails loadUserByUsername(String email)
@@ -239,6 +231,22 @@ public class UserService implements UserDetailsService {
       .orElseThrow(
         () -> new UserNotFoundException("Unauthorized | 401", email)
       );
+  }
+
+  public UserModel findOneById(Long id) throws UserNotFoundException {
+    return userRepository
+      .findOneById(id)
+      .orElseThrow(
+        () -> new UserNotFoundException("Unauthorized | 401", id.toString())
+      );
+  }
+
+  public List<UserModel> findAll() {
+    return userRepository.findAll();
+  }
+
+  public void saveUser(UserModel user) {
+    userRepository.save(user);
   }
 
   public long count() {

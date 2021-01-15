@@ -1,0 +1,7 @@
+extend type Subscription {
+  playsSubscribe: Subscribe!
+}
+
+extend type Query {
+  findPlayByChart(period: Period): [Chart]!
+}

@@ -17,30 +17,41 @@ public class JdbcChartRepository implements ChartRepository {
     JdbcChartRepository.class
   );
 
+  private final JdbcTemplate jdbcTemplate;
+
   @Autowired
-  public JdbcTemplate jdbcTemplate;
+  public JdbcChartRepository(JdbcTemplate jdbcTemplate) {
+    this.jdbcTemplate = jdbcTemplate;
+  }
 
   private String coercedTimeInterval(PeriodEnums pEnums) {
     switch (pEnums) {
       case TODAY:
         {
-          return "SELECT generate_series(date_trunc('day', current_date)::timestamp, current_date::timestamp, ?::interval) as ddate, ?::interval as ddays FROM";
+          return "SELECT generate_series(date_trunc('day', current_timestamp)::timestamp, current_timestamp::timestamp, ?::interval) as ddate, ?::interval as ddays FROM";
         }
       case YESTERDAY:
         {
-          return "SELECT generate_series((current_date - interval '1 day')::timestamp, current_date::timestamp, ?::interval) as ddate, ?::interval as ddays FROM";
+          return "SELECT generate_series(date_trunc('day', current_timestamp - interval '1 day')::timestamp, date_trunc('day', current_timestamp), ?::interval) as ddate, ?::interval as ddays FROM";
         }
       case DAY:
         {
-          return "SELECT generate_series(date_trunc('month', current_date)::timestamp, current_date::timestamp, ?::interval) as ddate, ?::interval as ddays FROM";
+          return "SELECT generate_series(date_trunc('month', current_timestamp)::timestamp, current_date::timestamp, ?::interval) as ddate, ?::interval as ddays FROM";
         }
       case MONTH:
         {
           return "SELECT generate_series(date_trunc('year', current_date)::timestamp, current_date::timestamp, ?::interval) as ddate, ?::interval as ddays FROM";
         }
+      case YEAR: 
+       {
+          return "SELECT generate_series(date_trunc('year', current_date), current_date::timestamp, ?::interval) as ddate, ?::interval as ddays FROM";
+       }
+      case ALL: {
+        return "SELECT generate_series(date_trunc('year', created_at)::timestamp, current_date::timestamp, ?::interval) as ddate, ?::interval as ddays FROM";
+      }
       default:
         {
-          return "SELECT generate_series(created_at::timestamp, current_date::timestamp, ?::interval) as ddate, ?::interval as ddays FROM";
+          return "SELECT generate_series(date_trunc('year', created_at)::timestamp, current_timestamp::timestamp, ?::interval) as ddate, ?::interval as ddays FROM";
         }
     }
   }
@@ -104,6 +115,34 @@ public class JdbcChartRepository implements ChartRepository {
   public List<ChartModel> findPostChart(PeriodEnums pEnums) {
     return jdbcTemplate.query(
       queryBuilder(TableEnums.POSTS.getTable(), pEnums),
+      new Object[] { pEnums.getPeriod(), pEnums.getPeriod() },
+      (rs, rowNum) ->
+        new ChartModel(
+          rs.getTimestamp("timestamp"),
+          rs.getLong("delta"),
+          rs.getLong("deltaTotal")
+        )
+    );
+  }
+
+  @Override
+  public List<ChartModel> findPlayChart(PeriodEnums pEnums) {
+    return jdbcTemplate.query(
+      queryBuilder(TableEnums.PLAYS.getTable(), pEnums),
+      new Object[] { pEnums.getPeriod(), pEnums.getPeriod() },
+      (rs, rowNum) ->
+        new ChartModel(
+          rs.getTimestamp("timestamp"),
+          rs.getLong("delta"),
+          rs.getLong("deltaTotal")
+        )
+    );
+  }
+
+  @Override
+  public List<ChartModel> findImpressionsChart(PeriodEnums pEnums) {
+    return jdbcTemplate.query(
+      queryBuilder(TableEnums.IMPRESSIONS.getTable(), pEnums),
       new Object[] { pEnums.getPeriod(), pEnums.getPeriod() },
       (rs, rowNum) ->
         new ChartModel(

@@ -1,5 +1,6 @@
 package com.graphql.xymatic.service;
 
+import com.graphql.xymatic.exception.PostNotFoundException;
 import com.graphql.xymatic.model.PostModel;
 import com.graphql.xymatic.model.UserModel;
 import com.graphql.xymatic.repository.PostRepository;
@@ -21,6 +22,12 @@ public class PostService {
 
   public Page<PostModel> findAll(PageRequest request) {
     return postRepository.findAll(request);
+  }
+
+  public PostModel findOneById(Long id) throws PostNotFoundException {
+    return postRepository
+      .findOneById(id)
+      .orElseThrow(() -> new PostNotFoundException("Post Not Found", id));
   }
 
   public Boolean deleteById(Long id) {

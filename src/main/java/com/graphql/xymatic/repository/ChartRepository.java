@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface ChartRepository {
   List<ChartModel> findUserChart(PeriodEnums periodEnums);
   List<ChartModel> findPostChart(PeriodEnums periodEnums);
-  // List<ChartModel> findImpressionsChart(PeriodEnums periodEnums);
-  // List<ChartModel> findPlaysChart(PeriodEnums periodEnums);
-  // List<ChartModel> findTriggersChart(PeriodEnums periodEnums);
+  List<ChartModel> findImpressionsChart(PeriodEnums periodEnums);
+  List<ChartModel> findPlayChart(PeriodEnums periodEnums);
 }

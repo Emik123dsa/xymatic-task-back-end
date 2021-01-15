@@ -17,7 +17,7 @@ public class UserResolver implements GraphQLResolver<UserModel> {
     this.userService = userService;
   }
 
-  @PreAuthorize("hasAuthority('USER')")
+  @PreAuthorize("isAuthenticated()")
   public String getToken(UserModel userModel) {
     return userService.getToken(userModel);
   }

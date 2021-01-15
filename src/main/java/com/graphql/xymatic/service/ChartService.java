@@ -11,17 +11,40 @@ import org.springframework.stereotype.Service;
 public class ChartService {
 
   private final ChartRepository chartRepository;
-
   @Autowired
   public ChartService(ChartRepository chartRepository) {
     this.chartRepository = chartRepository;
   }
-
+  /**
+   * User Chart
+   * @param periodEnums
+   * @return
+   */
   public List<ChartModel> findUserChart(PeriodEnums periodEnums) {
     return chartRepository.findUserChart(periodEnums);
   }
-
+  /**
+   * Post Chart
+   * @param periodEnums
+   * @return
+   */
   public List<ChartModel> findPostChart(PeriodEnums periodEnums) {
     return chartRepository.findPostChart(periodEnums);
+  }
+  /**
+   * Impressions Chart
+   * @param periodEnums
+   * @return
+   */
+  public List<ChartModel> findImpressionsChart(PeriodEnums periodEnums) {
+    return chartRepository.findImpressionsChart(periodEnums);
+  }
+  /**
+   * Plays Chart
+   * @param periodEnums
+   * @return
+   */
+  public List<ChartModel> findPlayChart(PeriodEnums periodEnums) {
+    return chartRepository.findPlayChart(periodEnums);
   }
 }

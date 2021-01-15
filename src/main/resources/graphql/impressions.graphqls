@@ -1,0 +1,22 @@
+enum Attitude {
+  LIKE
+  DISLIKE
+}
+
+type Impressions {
+  id: ID!
+  author: User!
+  post: Post!
+  attitude: Attitude!
+  createdAt: String!
+  updatedAt: String!
+}
+
+extend type Query {
+  findAllImpressions: [Impressions]!
+  findImpressionsByChart(period: Period): [Chart]!
+}
+
+extend type Subscription {
+  impressionsSubscribe: Subscribe!
+}

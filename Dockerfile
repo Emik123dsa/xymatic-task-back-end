@@ -22,10 +22,10 @@ FROM tomcat:10.0.0-M9-jdk14-openjdk-oraclelinux7
 
 WORKDIR /app
 
-EXPOSE 8080
-
 COPY --from=MAVEN_BUILD /xymatic-back/build/app.jar /usr/local/tomcat/webapps/
 
 RUN sh -c 'touch /usr/local/tomcat/webapps/app.jar'
+
+EXPOSE 8080
 
 ENTRYPOINT ["java","-jar","/usr/local/tomcat/webapps/app.jar"]

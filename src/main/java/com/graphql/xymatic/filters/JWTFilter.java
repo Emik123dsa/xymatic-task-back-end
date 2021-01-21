@@ -28,11 +28,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
 public class JWTFilter extends OncePerRequestFilter {
-  private static final Logger logger = LoggerFactory.getLogger(JWTFilter.class);
+   private static final Logger logger = LoggerFactory.getLogger(JWTFilter.class);
   private static final String AUTHORIZATION_HEADER = "Authorization";
-  private static final Pattern BEARER_PATTERN = Pattern.compile(
-    "^Bearer (.+?)$"
-  );
+        private static final Pattern BEARER_PATTERN = Pattern.compile("^Bearer (.+?)$");
 
   private final UserService userService;
   private final SecurityProperties security;
@@ -44,37 +42,19 @@ public class JWTFilter extends OncePerRequestFilter {
   }
 
   @Override
-  protected void doFilterInternal(
-    HttpServletRequest request,
-    HttpServletResponse response,
-    FilterChain filterChain
-  )
-    throws IOException, ServletException {
-    
-    getToken(request)
-      .map(userService::loadUserByToken)
-      .map(
-        userDetails ->
-          JWTPreAuthenticationToken
-            .builder()
-            .principal(userDetails)
-            .details(new WebAuthenticationDetailsSource().buildDetails(request))
-            .build()
-      )
-      .ifPresent(
-        authentication ->
-          SecurityContextHolder.getContext().setAuthentication(authentication)
-      );
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws IOException, ServletException {
+
+    getToken(request).map(userService::loadUserByToken)
+        .map(userDetails -> JWTPreAuthenticationToken.builder().principal(userDetails)
+            .details(new WebAuthenticationDetailsSource().buildDetails(request)).build())
+        .ifPresent(authentication -> SecurityContextHolder.getContext().setAuthentication(authentication));
 
     filterChain.doFilter(request, response);
   }
 
   private Optional<String> getToken(HttpServletRequest httpServletRequest) {
-    return Optional
-      .ofNullable(httpServletRequest.getHeader(AUTHORIZATION_HEADER))
-      .filter(s -> !s.isEmpty())
-      .map(BEARER_PATTERN::matcher)
-      .filter(Matcher::find)
-      .map(matcher -> matcher.group(1));
+    return Optional.ofNullable(httpServletRequest.getHeader(AUTHORIZATION_HEADER)).filter(s -> !s.isEmpty())
+        .map(BEARER_PATTERN::matcher).filter(Matcher::find).map(matcher -> matcher.group(1));
   }
 }

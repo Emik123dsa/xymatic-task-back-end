@@ -17,8 +17,11 @@ build:
 up:
 	docker-compose -f docker-compose.yml up -d --force-recreate
 
-dump: 
-	docker-compose exec db sh -c "pg_dump -Fc -v --host=db --username=xymatic-user --dbname=xymatic-localhost -f ./database/xymatic-localhost.dump"
+pg_dump: 
+	docker-compose exec db sh -c "pg_dump -Fc -v --host=db --username=xymatic-user --dbname=xymatic-localhost -f ./database/xymatic-localhost.db.postgres.dump"
+
+dump:
+	-docker-compose exec db sh -c "psql -U xymatic-user --set ON_ERROR_STOP=on xymatic-localhost < xymatic-localhost.db.postgres.sql"
 	
 ssh-db: 
 	docker-compose exec db /bin/bash

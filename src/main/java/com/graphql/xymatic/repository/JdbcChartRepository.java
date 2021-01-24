@@ -42,13 +42,14 @@ public class JdbcChartRepository implements ChartRepository {
         {
           return "SELECT generate_series(date_trunc('year', current_date)::timestamp, current_date::timestamp, ?::interval) as ddate, ?::interval as ddays FROM";
         }
-      case YEAR: 
-       {
+      case YEAR:
+        {
           return "SELECT generate_series(date_trunc('year', current_date), current_date::timestamp, ?::interval) as ddate, ?::interval as ddays FROM";
-       }
-      case ALL: {
-        return "SELECT generate_series(date_trunc('year', created_at)::timestamp, current_date::timestamp, ?::interval) as ddate, ?::interval as ddays FROM";
-      }
+        }
+      case ALL:
+        {
+          return "SELECT generate_series(date_trunc('year', created_at)::timestamp, current_date::timestamp, ?::interval) as ddate, ?::interval as ddays FROM";
+        }
       default:
         {
           return "SELECT generate_series(date_trunc('year', created_at)::timestamp, current_timestamp::timestamp, ?::interval) as ddate, ?::interval as ddays FROM";

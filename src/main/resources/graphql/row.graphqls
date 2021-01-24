@@ -1,0 +1,8 @@
+type Rows {
+  type: String!
+  count: Long!
+}
+
+extend type Query {
+  countAllRows: [Rows]!
+}

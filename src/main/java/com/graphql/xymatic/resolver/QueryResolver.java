@@ -6,6 +6,7 @@ import com.graphql.xymatic.exception.UserNotFoundException;
 import com.graphql.xymatic.model.ChartModel;
 import com.graphql.xymatic.model.ImpressionsModel;
 import com.graphql.xymatic.model.PostModel;
+import com.graphql.xymatic.model.RowsCountModel;
 import com.graphql.xymatic.model.UserModel;
 import com.graphql.xymatic.repository.ChartRepository;
 import com.graphql.xymatic.repository.PostRepository;
@@ -13,8 +14,10 @@ import com.graphql.xymatic.repository.UserRepository;
 import com.graphql.xymatic.service.ChartService;
 import com.graphql.xymatic.service.ImpressionsService;
 import com.graphql.xymatic.service.PostService;
+import com.graphql.xymatic.service.RowsCountService;
 import com.graphql.xymatic.service.UserService;
 import com.graphql.xymatic.sort.PostSort;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.slf4j.*;
@@ -38,17 +41,20 @@ public class QueryResolver implements GraphQLQueryResolver {
   private final UserService userService;
   private final ChartService chartService;
   private final ImpressionsService impressionsService;
+  private final RowsCountService rowsCountService;
 
   public QueryResolver(
     AuthenticationProvider authentication,
     UserService userService,
     PostService postService,
     ChartService chartService,
+    RowsCountService rowsCountService,
     ImpressionsService impressionsService
   ) {
     this.postService = postService;
     this.userService = userService;
     this.chartService = chartService;
+    this.rowsCountService = rowsCountService;
     this.authentication = authentication;
     this.impressionsService = impressionsService;
   }
@@ -58,7 +64,13 @@ public class QueryResolver implements GraphQLQueryResolver {
     Integer size,
     PostSort sort
   ) {
-    return postService.findAll(PageRequest.of(page, size, sort != null ? sort.getSort() : Sort.unsorted()));
+    return postService.findAll(
+      PageRequest.of(
+        page,
+        size,
+        sort != null ? sort.getSort() : Sort.unsorted()
+      )
+    );
   }
 
   public Iterable<UserModel> findAllUsers() {
@@ -86,8 +98,6 @@ public class QueryResolver implements GraphQLQueryResolver {
   public Iterable<ChartModel> findPlayByChart(PeriodEnums pEnums) {
     return chartService.findPlayChart(pEnums);
   }
-
-  
 
   // public List<PostModel> findPostsByEmail(String email, int page, int size, PostSort sort)
   //   throws UserNotFoundException {
@@ -136,5 +146,10 @@ public class QueryResolver implements GraphQLQueryResolver {
   @PreAuthorize("isAuthenticated()")
   public long countPosts() {
     return postService.count();
+  }
+
+  //@PreAuthorize("hasAuthority('ADMIN')")
+  public List<RowsCountModel> countAllRows() {
+    return rowsCountService.countAllRows();
   }
 }

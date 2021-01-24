@@ -8,6 +8,7 @@ import com.graphql.xymatic.service.ChartService;
 import com.graphql.xymatic.service.ImpressionsService;
 import com.graphql.xymatic.service.PlayService;
 import com.graphql.xymatic.service.PostService;
+import com.graphql.xymatic.service.RowsCountService;
 import com.graphql.xymatic.service.UserService;
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQLError;
@@ -29,6 +30,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 @ComponentScan
 @SpringBootApplication
 public class XymaticApplication implements CommandLineRunner {
+
   public static void main(String[] args) {
     SpringApplication.run(XymaticApplication.class, args);
   }
@@ -51,7 +53,7 @@ public class XymaticApplication implements CommandLineRunner {
           .filter(e -> !isClientError(e))
           .map(GraphQLErrorAdapter::new)
           .collect(Collectors.toList());
-        
+
         List<GraphQLError> e = new ArrayList<>();
         e.addAll(clientErrors);
         e.addAll(serverErrors);
@@ -79,10 +81,16 @@ public class XymaticApplication implements CommandLineRunner {
     AuthenticationProvider authentication,
     UserService userService,
     PostService postService,
-    ImpressionsService impressionsService, 
+    ImpressionsService impressionsService,
     PlayService playService
   ) {
-    return new SubscriptionResolver(authentication, userService, postService, impressionsService, playService);
+    return new SubscriptionResolver(
+      authentication,
+      userService,
+      postService,
+      impressionsService,
+      playService
+    );
   }
 
   /**
@@ -97,6 +105,7 @@ public class XymaticApplication implements CommandLineRunner {
     UserService userService,
     PostService postService,
     ChartService chartService,
+    RowsCountService rowsCountService,
     ImpressionsService impressionsService
   ) {
     return new QueryResolver(
@@ -104,6 +113,7 @@ public class XymaticApplication implements CommandLineRunner {
       userService,
       postService,
       chartService,
+      rowsCountService,
       impressionsService
     );
   }

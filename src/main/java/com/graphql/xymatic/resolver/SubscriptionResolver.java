@@ -28,14 +28,13 @@ public class SubscriptionResolver implements GraphQLSubscriptionResolver {
   private final UserService userService;
   private final PostService postService;
   private final ImpressionsService impressionsService;
-  private final PlayService playService; 
-
+  private final PlayService playService;
 
   public SubscriptionResolver(
     AuthenticationProvider authentication,
     UserService userService,
     PostService postService,
-    ImpressionsService impressionsService, 
+    ImpressionsService impressionsService,
     PlayService playService
   ) {
     this.authentication = authentication;
@@ -48,24 +47,48 @@ public class SubscriptionResolver implements GraphQLSubscriptionResolver {
   public Publisher<SubscribeModel> userSubscribe() {
     return Flux
       .interval(Duration.ofSeconds(1))
-      .map(num -> new SubscribeModel(userService.count(), LocalDateTime.now().withNano(0)));
+      .map(
+        num ->
+          new SubscribeModel(
+            userService.count(),
+            LocalDateTime.now().withNano(0)
+          )
+      );
   }
 
   public Publisher<SubscribeModel> postSubscribe() {
     return Flux
       .interval(Duration.ofSeconds(1))
-      .map(num -> new SubscribeModel(postService.count(), LocalDateTime.now().withNano(0)));
+      .map(
+        num ->
+          new SubscribeModel(
+            postService.count(),
+            LocalDateTime.now().withNano(0)
+          )
+      );
   }
 
   public Publisher<SubscribeModel> impressionsSubscribe() {
     return Flux
       .interval(Duration.ofSeconds(1))
-      .map(num -> new SubscribeModel(impressionsService.count(),LocalDateTime.now().withNano(0)));
+      .map(
+        num ->
+          new SubscribeModel(
+            impressionsService.count(),
+            LocalDateTime.now().withNano(0)
+          )
+      );
   }
 
   public Publisher<SubscribeModel> playsSubscribe() {
     return Flux
       .interval(Duration.ofSeconds(1))
-      .map(num -> new SubscribeModel(playService.count(), LocalDateTime.now().withNano(0)));
+      .map(
+        num ->
+          new SubscribeModel(
+            playService.count(),
+            LocalDateTime.now().withNano(0)
+          )
+      );
   }
 }

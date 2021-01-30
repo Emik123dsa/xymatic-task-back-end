@@ -30,10 +30,6 @@ public class ChartModel implements Serializable {
     return periodEnums;
   }
 
-  public Timestamp tTimestamp() {
-    return this.timestamp;
-  }
-
   public Long getDelta() {
     return this.delta;
   }

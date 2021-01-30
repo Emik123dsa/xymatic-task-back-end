@@ -30,7 +30,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 @ComponentScan
 @SpringBootApplication
 public class XymaticApplication implements CommandLineRunner {
-
   public static void main(String[] args) {
     SpringApplication.run(XymaticApplication.class, args);
   }

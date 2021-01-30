@@ -12,7 +12,7 @@ public enum DirectionSortEnums {
     this.direction = direction;
   }
 
-  public Sort.Direction getDirection() {
+  public Sort.Direction getDirectionSort() {
     return direction;
   }
 }

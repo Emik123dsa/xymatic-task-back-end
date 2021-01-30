@@ -29,6 +29,6 @@ public class PostSort {
   }
 
   public Sort getSort() {
-    return Sort.by(getDirection().getDirection(), getDate().getDateSort());
+    return Sort.by(getDirection().getDirectionSort(), getDate().getDateSort());
   }
 }

@@ -4,6 +4,7 @@ type Post {
   content: String!
   author: User!
   verbose: [Impressions]!
+  count: Long!
   createdAt: String!
   updatedAt: String!
 }

@@ -2,6 +2,20 @@ extend type Subscription {
   playsSubscribe: Subscribe!
 }
 
+type Play {
+  id: ID!
+  title: String!
+  author: User!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input PlaySort {
+  date: DateSort
+  direction: DirectionSort
+}
+
 extend type Query {
+  findAllPlays(page: Int!, size: Int!, sort: PlaySort!): [Play]!
   findPlayByChart(period: Period): [Chart]!
 }

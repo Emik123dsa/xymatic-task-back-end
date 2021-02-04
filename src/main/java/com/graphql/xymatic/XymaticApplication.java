@@ -9,6 +9,7 @@ import com.graphql.xymatic.service.ImpressionsService;
 import com.graphql.xymatic.service.PlayService;
 import com.graphql.xymatic.service.PostService;
 import com.graphql.xymatic.service.RowsCountService;
+import com.graphql.xymatic.service.TriggerService;
 import com.graphql.xymatic.service.UserService;
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQLError;
@@ -81,14 +82,16 @@ public class XymaticApplication implements CommandLineRunner {
     UserService userService,
     PostService postService,
     ImpressionsService impressionsService,
-    PlayService playService
+    PlayService playService,
+    TriggerService triggerService
   ) {
     return new SubscriptionResolver(
       authentication,
       userService,
       postService,
       impressionsService,
-      playService
+      playService,
+      triggerService
     );
   }
 
@@ -104,6 +107,7 @@ public class XymaticApplication implements CommandLineRunner {
     UserService userService,
     PostService postService,
     ChartService chartService,
+    PlayService playService,
     RowsCountService rowsCountService,
     ImpressionsService impressionsService
   ) {
@@ -112,6 +116,7 @@ public class XymaticApplication implements CommandLineRunner {
       userService,
       postService,
       chartService,
+      playService,
       rowsCountService,
       impressionsService
     );

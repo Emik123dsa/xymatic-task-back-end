@@ -1,7 +1,6 @@
 package com.graphql.xymatic.model;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class SubscribeModel implements Serializable {

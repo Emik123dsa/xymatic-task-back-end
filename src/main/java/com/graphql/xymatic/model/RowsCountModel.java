@@ -1,7 +1,6 @@
 package com.graphql.xymatic.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 
 public class RowsCountModel implements Serializable {

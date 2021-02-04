@@ -5,6 +5,7 @@ import com.graphql.xymatic.enums.PeriodEnums;
 import com.graphql.xymatic.exception.UserNotFoundException;
 import com.graphql.xymatic.model.ChartModel;
 import com.graphql.xymatic.model.ImpressionsModel;
+import com.graphql.xymatic.model.PlaysModel;
 import com.graphql.xymatic.model.PostModel;
 import com.graphql.xymatic.model.RowsCountModel;
 import com.graphql.xymatic.model.UserModel;
@@ -13,10 +14,15 @@ import com.graphql.xymatic.repository.PostRepository;
 import com.graphql.xymatic.repository.UserRepository;
 import com.graphql.xymatic.service.ChartService;
 import com.graphql.xymatic.service.ImpressionsService;
+import com.graphql.xymatic.service.PlayService;
 import com.graphql.xymatic.service.PostService;
 import com.graphql.xymatic.service.RowsCountService;
 import com.graphql.xymatic.service.UserService;
+import com.graphql.xymatic.sort.ImpressionSort;
+import com.graphql.xymatic.sort.PlaySort;
 import com.graphql.xymatic.sort.PostSort;
+import com.graphql.xymatic.sort.UserSort;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,12 +48,14 @@ public class QueryResolver implements GraphQLQueryResolver {
   private final ChartService chartService;
   private final ImpressionsService impressionsService;
   private final RowsCountService rowsCountService;
+  private final    PlayService playService;
 
   public QueryResolver(
     AuthenticationProvider authentication,
     UserService userService,
     PostService postService,
     ChartService chartService,
+    PlayService playService,
     RowsCountService rowsCountService,
     ImpressionsService impressionsService
   ) {
@@ -57,8 +65,10 @@ public class QueryResolver implements GraphQLQueryResolver {
     this.rowsCountService = rowsCountService;
     this.authentication = authentication;
     this.impressionsService = impressionsService;
+    this.playService = playService;
   }
 
+  @PreAuthorize("hasAuthority('ADMIN')")
   public Iterable<PostModel> findAllPosts(
     Integer page,
     Integer size,
@@ -73,14 +83,54 @@ public class QueryResolver implements GraphQLQueryResolver {
     );
   }
 
-  public Iterable<UserModel> findAllUsers() {
-    return userService.findAll();
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public Iterable<UserModel> findAllUsers(
+    Integer page, 
+    Integer size, 
+    UserSort sort
+  ) {
+    return userService.findAll(
+      PageRequest.of(
+        page,
+        size,
+        sort != null ? sort.getSort() : Sort.unsorted()
+      )
+    );
+  }
+
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public Iterable<PlaysModel> findAllPlays(
+    Integer page, 
+    Integer size, 
+    PlaySort sort
+  ) {
+    return playService.findAll(
+      PageRequest.of(
+        page,
+        size,
+        sort != null ? sort.getSort() : Sort.unsorted()
+      )
+    );
+  }
+
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public Iterable<ImpressionsModel> findAllImpressions(
+    Integer page, 
+    Integer size, 
+    ImpressionSort sort
+  ) {
+    return impressionsService.findAll(
+      PageRequest.of(
+        page,
+        size,
+        sort != null ? sort.getSort() : Sort.unsorted()
+      )
+    );
   }
 
   @PreAuthorize("isAuthenticated()")
   public UserModel findUserByEmail(String email) throws UserNotFoundException {
-    UserModel user = userService.findOneByEmail(email);
-    return user;
+    return userService.findOneByEmail(email);
   }
 
   public Iterable<ChartModel> findUserByChart(PeriodEnums pEnums) {
@@ -98,19 +148,6 @@ public class QueryResolver implements GraphQLQueryResolver {
   public Iterable<ChartModel> findPlayByChart(PeriodEnums pEnums) {
     return chartService.findPlayChart(pEnums);
   }
-
-  // public List<PostModel> findPostsByEmail(String email, int page, int size, PostSort sort)
-  //   throws UserNotFoundException {
-  //   UserModel user = userService.findOneByEmail(email);
-
-  //   if (user == null) {
-  //     throw new UserNotFoundException("User Not Found", email);
-  //   }
-
-  //   PageRequest pageRequest = PageRequest.of(page, size, sort == null ? Sort.unsorted() : sort.getSort());
-
-  //   return postService.findAllByAuthor(user, pageRequest);
-  // }
 
   public List<ImpressionsModel> findAllImpressions() {
     return impressionsService.findAll();

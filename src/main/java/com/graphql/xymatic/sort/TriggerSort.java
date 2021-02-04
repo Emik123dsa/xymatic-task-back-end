@@ -6,13 +6,13 @@ import com.graphql.xymatic.enums.DateSortEnums;
 import com.graphql.xymatic.enums.DirectionSortEnums;
 import org.springframework.data.domain.Sort;
 
-public class PlaySort {
+public class TriggerSort {
 
   private final DateSortEnums date;
   private final DirectionSortEnums direction;
 
   @JsonCreator
-  public PlaySort(
+  public TriggerSort(
     @JsonProperty("date") DateSortEnums date,
     @JsonProperty("direction") DirectionSortEnums direction
   ) {

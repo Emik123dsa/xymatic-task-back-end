@@ -2,17 +2,23 @@ package com.graphql.xymatic.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLSubscriptionResolver;
 import com.graphql.xymatic.model.SubscribeModel;
+import com.graphql.xymatic.model.TriggerModel;
 import com.graphql.xymatic.repository.ImpressionsRepository;
 import com.graphql.xymatic.repository.PlaysRepository;
 import com.graphql.xymatic.service.ImpressionsService;
 import com.graphql.xymatic.service.PlayService;
 import com.graphql.xymatic.service.PostService;
+import com.graphql.xymatic.service.TriggerService;
 import com.graphql.xymatic.service.UserService;
+import com.graphql.xymatic.sort.TriggerSort;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.reactivestreams.*;
 import org.slf4j.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationProvider;
 import reactor.core.publisher.*;
@@ -29,19 +35,22 @@ public class SubscriptionResolver implements GraphQLSubscriptionResolver {
   private final PostService postService;
   private final ImpressionsService impressionsService;
   private final PlayService playService;
+  private final TriggerService triggerService;
 
   public SubscriptionResolver(
     AuthenticationProvider authentication,
     UserService userService,
     PostService postService,
     ImpressionsService impressionsService,
-    PlayService playService
+    PlayService playService,
+    TriggerService triggerService
   ) {
     this.authentication = authentication;
     this.userService = userService;
     this.postService = postService;
     this.impressionsService = impressionsService;
     this.playService = playService;
+    this.triggerService = triggerService;
   }
 
   public Publisher<SubscribeModel> userSubscribe() {
@@ -88,6 +97,25 @@ public class SubscriptionResolver implements GraphQLSubscriptionResolver {
           new SubscribeModel(
             playService.count(),
             LocalDateTime.now().withNano(0)
+          )
+      );
+  }
+
+  public Publisher<Page<TriggerModel>> triggersSubscribe(
+    Integer page,
+    Integer size,
+    TriggerSort triggerSort
+  ) {
+    return Flux
+      .interval(Duration.ofSeconds(1))
+      .map(
+        trigger ->
+          triggerService.findAll(
+            PageRequest.of(
+              page,
+              size,
+              triggerSort == null ? Sort.unsorted() : triggerSort.getSort()
+            )
           )
       );
   }

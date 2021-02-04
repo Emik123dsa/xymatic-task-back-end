@@ -1,49 +1,47 @@
 package com.graphql.xymatic.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 
 @Entity
-@Table(name = "xt_plays")
+@Table(name = "xt_triggers")
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class PlaysModel implements Serializable {
+public class TriggerModel implements Serializable {
 
   private static final long serialVersionUID =
     SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @EqualsAndHashCode.Include
   private Long id;
 
-  @Column(name = "title")
+  @Column(name = "tg_key")
   @EqualsAndHashCode.Include
-  private String title;
+  private String tgKey;
 
-  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  @JoinColumn(name = "author", nullable = false, updatable = false)
-  private UserModel author;
+  @Column(name = "tg_value")
+  @EqualsAndHashCode.Include
+  private String tgValue;
 
   @JsonFormat(
     shape = JsonFormat.Shape.STRING,
@@ -52,10 +50,7 @@ public class PlaysModel implements Serializable {
   @Column(name = "created_at", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
   private LocalDateTime createdAt;
 
-  @JsonFormat(
-    shape = JsonFormat.Shape.STRING,
-    pattern = "yyyy-MM-dd HH:mm:ss.SSS"
-  )
-  @Column(name = "updated_at", columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-  private LocalDateTime updatedAt;
+  @Column(name = "tg_operation")
+  @EqualsAndHashCode.Include
+  private String tgOperation;
 }

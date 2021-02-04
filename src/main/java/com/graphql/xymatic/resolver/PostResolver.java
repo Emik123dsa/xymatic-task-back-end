@@ -12,7 +12,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
 @Component
 public class PostResolver implements GraphQLResolver<PostModel> {
 
@@ -21,7 +20,11 @@ public class PostResolver implements GraphQLResolver<PostModel> {
   private final PostService postService;
 
   @Autowired
-  public PostResolver(UserService userService, ImpressionsService impressionsService, PostService postService) {
+  public PostResolver(
+    UserService userService,
+    ImpressionsService impressionsService,
+    PostService postService
+  ) {
     this.userService = userService;
     this.impressionsService = impressionsService;
     this.postService = postService;

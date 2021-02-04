@@ -1,0 +1,16 @@
+type Trigger {
+  id: Int!
+  tgKey: String!
+  tgValue: String!
+  tgOperation: String!
+  createdAt: String!
+}
+
+input TriggerSort {
+  date: DateSort
+  direction: DirectionSort
+}
+
+extend type Subscription {
+  triggersSubscribe(page: Int!, size: Int!, sort: TriggerSort!): [Trigger]!
+}

@@ -15,9 +15,14 @@ type User {
   updatedAt: String!
 }
 
+input UserSort {
+  date: DateSort
+  direction: DirectionSort
+}
+
 type Query {
   findUserByEmail(email: String!): User!
-  findAllUsers: [User]!
+  findAllUsers(page: Int!, size: Int!, sort: UserSort!): [User]!
   countUsers: Long!
   findUserByChart(period: Period): [Chart]!
   signIn(email: String!, password: String!): User!

@@ -34,6 +34,8 @@ import java.util.stream.Collectors;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.BeanDefinitionDsl.Role;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -239,6 +241,10 @@ public class UserService implements UserDetailsService {
       .orElseThrow(
         () -> new UserNotFoundException("Unauthorized | 401", id.toString())
       );
+  }
+
+  public Page<UserModel> findAll(PageRequest request) {
+    return userRepository.findAll(request);
   }
 
   public List<UserModel> findAll() {

@@ -48,9 +48,9 @@ public class ImpressionsService {
 
   public List<ImpressionsModel> findAll(PageRequest request) {
     return impressionsRepository
-    .findAll(request)
-    .stream()
-    .collect(Collectors.toList());
+      .findAll(request)
+      .stream()
+      .collect(Collectors.toList());
   }
 
   public Long count() {

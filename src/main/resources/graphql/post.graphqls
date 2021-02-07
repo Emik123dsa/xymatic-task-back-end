@@ -4,7 +4,6 @@ type Post {
   content: String!
   author: User!
   verbose: [Impressions]!
-  count: Long!
   createdAt: String!
   updatedAt: String!
 }
@@ -14,14 +13,14 @@ input PostSort {
   direction: DirectionSort
 }
 
-extend type Subscription {
+type Subscription {
   postSubscribe: Subscribe!
 }
 
 extend type Query {
   findAllPosts(page: Int!, size: Int!, sort: PostSort!): [Post]!
   findPostByChart(period: Period): [Chart]!
-  countPosts: Long!
+  countPosts: Int!
 }
 
 extend type Mutation {

@@ -1,11 +1,13 @@
 package com.graphql.xymatic.sort;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.graphql.xymatic.enums.DateSortEnums;
 import com.graphql.xymatic.enums.DirectionSortEnums;
 import org.springframework.data.domain.Sort;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PlaySort {
 
   private final DateSortEnums date;

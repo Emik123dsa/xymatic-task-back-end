@@ -3,9 +3,7 @@ package com.graphql.xymatic.service;
 import com.graphql.xymatic.model.PlaysModel;
 import com.graphql.xymatic.repository.PlaysRepository;
 import java.util.List;
-
 import javax.print.attribute.standard.PageRanges;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

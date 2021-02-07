@@ -1,6 +1,6 @@
 type Rows {
   type: String!
-  count: Long!
+  count: Int!
 }
 
 extend type Query {

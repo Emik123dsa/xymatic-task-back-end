@@ -1,5 +1,5 @@
 type Chart {
   timestamp: String!
-  delta: Long!
-  deltaTotal: Long!
+  delta: Int!
+  deltaTotal: Int!
 }

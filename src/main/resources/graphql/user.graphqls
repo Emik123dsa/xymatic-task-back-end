@@ -23,7 +23,7 @@ input UserSort {
 type Query {
   findUserByEmail(email: String!): User!
   findAllUsers(page: Int!, size: Int!, sort: UserSort!): [User]!
-  countUsers: Long!
+  countUsers: Int!
   findUserByChart(period: Period): [Chart]!
   signIn(email: String!, password: String!): User!
   getCurrentUser: User!

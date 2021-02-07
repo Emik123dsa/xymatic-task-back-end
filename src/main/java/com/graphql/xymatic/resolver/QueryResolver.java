@@ -9,9 +9,6 @@ import com.graphql.xymatic.model.PlaysModel;
 import com.graphql.xymatic.model.PostModel;
 import com.graphql.xymatic.model.RowsCountModel;
 import com.graphql.xymatic.model.UserModel;
-import com.graphql.xymatic.repository.ChartRepository;
-import com.graphql.xymatic.repository.PostRepository;
-import com.graphql.xymatic.repository.UserRepository;
 import com.graphql.xymatic.service.ChartService;
 import com.graphql.xymatic.service.ImpressionsService;
 import com.graphql.xymatic.service.PlayService;
@@ -22,9 +19,6 @@ import com.graphql.xymatic.sort.ImpressionSort;
 import com.graphql.xymatic.sort.PlaySort;
 import com.graphql.xymatic.sort.PostSort;
 import com.graphql.xymatic.sort.UserSort;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.slf4j.*;
 import org.springframework.data.domain.*;
@@ -32,7 +26,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class QueryResolver implements GraphQLQueryResolver {
@@ -48,7 +41,7 @@ public class QueryResolver implements GraphQLQueryResolver {
   private final ChartService chartService;
   private final ImpressionsService impressionsService;
   private final RowsCountService rowsCountService;
-  private final    PlayService playService;
+  private final PlayService playService;
 
   public QueryResolver(
     AuthenticationProvider authentication,
@@ -85,8 +78,8 @@ public class QueryResolver implements GraphQLQueryResolver {
 
   @PreAuthorize("hasAuthority('ADMIN')")
   public Iterable<UserModel> findAllUsers(
-    Integer page, 
-    Integer size, 
+    Integer page,
+    Integer size,
     UserSort sort
   ) {
     return userService.findAll(
@@ -100,8 +93,8 @@ public class QueryResolver implements GraphQLQueryResolver {
 
   @PreAuthorize("hasAuthority('ADMIN')")
   public Iterable<PlaysModel> findAllPlays(
-    Integer page, 
-    Integer size, 
+    Integer page,
+    Integer size,
     PlaySort sort
   ) {
     return playService.findAll(
@@ -115,8 +108,8 @@ public class QueryResolver implements GraphQLQueryResolver {
 
   @PreAuthorize("hasAuthority('ADMIN')")
   public Iterable<ImpressionsModel> findAllImpressions(
-    Integer page, 
-    Integer size, 
+    Integer page,
+    Integer size,
     ImpressionSort sort
   ) {
     return impressionsService.findAll(
@@ -175,7 +168,7 @@ public class QueryResolver implements GraphQLQueryResolver {
     return userService.getCurrentUser();
   }
 
-  @PreAuthorize("hasAuthority('ADMIN')")
+  // @PreAuthorize("hasAnyAuthority")
   public long countUsers() {
     return userService.count();
   }

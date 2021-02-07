@@ -1,6 +1,6 @@
 package com.graphql.xymatic.resolver;
 
-import com.coxautodev.graphql.tools.GraphQLResolver;
+ import com.coxautodev.graphql.tools.GraphQLResolver;
 import com.graphql.xymatic.model.UserModel;
 import com.graphql.xymatic.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

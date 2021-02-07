@@ -14,6 +14,7 @@ import com.graphql.xymatic.service.UserService;
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQLError;
 import graphql.servlet.GraphQLErrorHandler;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class XymaticApplication implements CommandLineRunner {
           .map(GraphQLErrorAdapter::new)
           .collect(Collectors.toList());
 
-        List<GraphQLError> e = new ArrayList<>();
+        List<GraphQLError> e = new ArrayList<GraphQLError>();
         e.addAll(clientErrors);
         e.addAll(serverErrors);
         return e;

@@ -9,9 +9,9 @@ import com.graphql.xymatic.model.UserModel;
 import com.graphql.xymatic.service.ImpressionsService;
 import com.graphql.xymatic.service.PostService;
 import com.graphql.xymatic.service.UserService;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 
 @Component
 public class ImpressionsResolver implements GraphQLResolver<ImpressionsModel> {

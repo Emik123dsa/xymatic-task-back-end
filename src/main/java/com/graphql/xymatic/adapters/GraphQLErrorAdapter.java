@@ -3,6 +3,7 @@ package com.graphql.xymatic.adapters;
 import graphql.ErrorType;
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQLError;
+ 
 import graphql.language.SourceLocation;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class GraphQLErrorAdapter implements GraphQLError {
 
   @Override
   public ErrorType getErrorType() {
-    return error.getErrorType();
+    return (ErrorType) error.getErrorType();
   }
 
   @Override

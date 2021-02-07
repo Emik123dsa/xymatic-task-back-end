@@ -12,11 +12,20 @@ type Impressions {
   updatedAt: String!
 }
 
+input ImpressionSort {
+  date: DateSort
+  direction: DirectionSort
+}
+
 extend type Query {
-  findAllImpressions: [Impressions]!
+  findAllImpressions(
+    page: Int!
+    size: Int!
+    sort: ImpressionSort!
+  ): [Impressions]!
   findImpressionsByChart(period: Period): [Chart]!
 }
 
-extend type Subscription {
+type Subscription {
   impressionsSubscribe: Subscribe!
 }

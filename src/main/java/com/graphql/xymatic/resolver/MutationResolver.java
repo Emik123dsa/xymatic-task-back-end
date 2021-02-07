@@ -1,12 +1,10 @@
 package com.graphql.xymatic.resolver;
 
-import com.coxautodev.graphql.tools.GraphQLMutationResolver;
+ import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.graphql.xymatic.exception.UserExistsException;
 import com.graphql.xymatic.model.PostModel;
 import com.graphql.xymatic.model.UserInput;
 import com.graphql.xymatic.model.UserModel;
-import com.graphql.xymatic.repository.PostRepository;
-import com.graphql.xymatic.repository.UserRepository;
 import com.graphql.xymatic.service.PostService;
 import com.graphql.xymatic.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
